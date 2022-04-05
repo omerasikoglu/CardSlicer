@@ -27,7 +27,7 @@ public class @TouchControlMap : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Swerve"",
+                    ""name"": ""Slide"",
                     ""type"": ""Value"",
                     ""id"": ""304b7929-9c60-4393-84a7-39a75e5c703a"",
                     ""expectedControlType"": ""Vector2"",
@@ -62,7 +62,7 @@ public class @TouchControlMap : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Swerve"",
+                    ""action"": ""Slide"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -85,7 +85,7 @@ public class @TouchControlMap : IInputActionCollection, IDisposable
         // Touch
         m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
         m_Touch_TouchPos = m_Touch.FindAction("TouchPos", throwIfNotFound: true);
-        m_Touch_Swerve = m_Touch.FindAction("Swerve", throwIfNotFound: true);
+        m_Touch_Slide = m_Touch.FindAction("Slide", throwIfNotFound: true);
         m_Touch_IsTouching = m_Touch.FindAction("IsTouching", throwIfNotFound: true);
     }
 
@@ -137,14 +137,14 @@ public class @TouchControlMap : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Touch;
     private ITouchActions m_TouchActionsCallbackInterface;
     private readonly InputAction m_Touch_TouchPos;
-    private readonly InputAction m_Touch_Swerve;
+    private readonly InputAction m_Touch_Slide;
     private readonly InputAction m_Touch_IsTouching;
     public struct TouchActions
     {
         private @TouchControlMap m_Wrapper;
         public TouchActions(@TouchControlMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @TouchPos => m_Wrapper.m_Touch_TouchPos;
-        public InputAction @Swerve => m_Wrapper.m_Touch_Swerve;
+        public InputAction @Slide => m_Wrapper.m_Touch_Slide;
         public InputAction @IsTouching => m_Wrapper.m_Touch_IsTouching;
         public InputActionMap Get() { return m_Wrapper.m_Touch; }
         public void Enable() { Get().Enable(); }
@@ -158,9 +158,9 @@ public class @TouchControlMap : IInputActionCollection, IDisposable
                 @TouchPos.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchPos;
                 @TouchPos.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchPos;
                 @TouchPos.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchPos;
-                @Swerve.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnSwerve;
-                @Swerve.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnSwerve;
-                @Swerve.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnSwerve;
+                @Slide.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnSlide;
+                @Slide.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnSlide;
+                @Slide.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnSlide;
                 @IsTouching.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnIsTouching;
                 @IsTouching.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnIsTouching;
                 @IsTouching.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnIsTouching;
@@ -171,9 +171,9 @@ public class @TouchControlMap : IInputActionCollection, IDisposable
                 @TouchPos.started += instance.OnTouchPos;
                 @TouchPos.performed += instance.OnTouchPos;
                 @TouchPos.canceled += instance.OnTouchPos;
-                @Swerve.started += instance.OnSwerve;
-                @Swerve.performed += instance.OnSwerve;
-                @Swerve.canceled += instance.OnSwerve;
+                @Slide.started += instance.OnSlide;
+                @Slide.performed += instance.OnSlide;
+                @Slide.canceled += instance.OnSlide;
                 @IsTouching.started += instance.OnIsTouching;
                 @IsTouching.performed += instance.OnIsTouching;
                 @IsTouching.canceled += instance.OnIsTouching;
@@ -184,7 +184,7 @@ public class @TouchControlMap : IInputActionCollection, IDisposable
     public interface ITouchActions
     {
         void OnTouchPos(InputAction.CallbackContext context);
-        void OnSwerve(InputAction.CallbackContext context);
+        void OnSlide(InputAction.CallbackContext context);
         void OnIsTouching(InputAction.CallbackContext context);
     }
 }
