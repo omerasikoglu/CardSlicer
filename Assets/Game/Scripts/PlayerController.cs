@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using NaughtyAttributes;
 using DG.Tweening;
-using UnityEngine.InputSystem;
-// ReSharper disable All
 
+[SuppressMessage("ReSharper", "Unity.InefficientPropertyAccess")]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField, Foldout("[Input]")] private InputManager inputManager;
@@ -13,36 +13,53 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Foldout("[Movement]")] private float movementSpeed = 8f, rotationSpeed = 3f;
 
     [SerializeField] private Transform playerRoot, womanRoot;
-    [SerializeField] private BoxCollider cardCollider;
+
+    private bool isTouchingScreen, canMove = true;
 
     private Vector3 goCoord, worldOffsetPos;
-    private bool isTouchingScreen;
-    private bool canMove = true;
+    private Vector3 eulerLeft, eulerRight;
 
     private void Awake()
     {
         InputObserver();
+        InitEulerLimits();
+    }
+
+    private void InitEulerLimits()
+    {
+        eulerLeft = new Vector3(
+            playerRoot.localEulerAngles.x, playerRoot.localEulerAngles.y, 75f
+        );
+        eulerRight = new Vector3(
+            playerRoot.localEulerAngles.x, playerRoot.localEulerAngles.y, -75f
+        );
     }
 
     private void Update()
     {
         HandleMovement();
+        CheckRotationLimits();
+    }
+
+    private void CheckRotationLimits()
+    {
+        if (playerRoot.rotation.z > 0.65f) playerRoot.localEulerAngles = eulerLeft;
+        if (playerRoot.rotation.z < -0.65f) playerRoot.localEulerAngles = eulerRight;
     }
 
     private void HandleMovement()
     {
-        transform.position += transform.forward * Time.deltaTime * movementSpeed;
+        transform.position += movementSpeed * Time.deltaTime * transform.forward;
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.CompareTag("Collectible"))
-        {
-            Debug.Log("carded");
-            Destroy(collision.GetComponentInParent<Transform>().gameObject);
-        }
-    }
+        Collectible collectible = collision.GetComponentInParent<Collectible>();
 
+        if (collectible == null) return;
+
+        //Destroy(collision.GetComponentInParent<Transform>().gameObject);
+    }
 
     #region Input
     private void InputObserver()
@@ -89,9 +106,14 @@ public class PlayerController : MonoBehaviour
 
     private void SlideRotateZ(float delta)
     {
+        if (playerRoot.rotation.z > 0.6f && delta > 0f) return;
+        if (playerRoot.rotation.z < -0.6f && delta < 0f) return;
+
+        //if (playerRoot.rotation.z + delta * 0.010 > 0.65f) return;
+        //if (playerRoot.rotation.z + delta * 0.010 < -0.65f) return;
+
         playerRoot.Rotate(0, 0, delta);
     }
-
     private void SlideMovementY()
     {
         playerRoot.position = new Vector3(transform.position.x, worldOffsetPos.y, transform.position.z);
