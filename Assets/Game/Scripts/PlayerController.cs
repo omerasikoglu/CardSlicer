@@ -5,16 +5,17 @@ using System.Diagnostics.CodeAnalysis;
 using NaughtyAttributes;
 using DG.Tweening;
 
-[SuppressMessage("ReSharper", "Unity.InefficientPropertyAccess")]
-public class PlayerController : MonoBehaviour
+public class PlayerController : Model
 {
     [SerializeField, Foldout("[Input]")] private InputManager inputManager;
     [SerializeField, Foldout("[Input]")] private bool isSlideMovementYActive, isSlideMovementXActive, isSlideRotateZActive;
-    [SerializeField, Foldout("[Movement]")] private float movementSpeed = 8f, rotationSpeed = 3f;
-
-    [SerializeField] private Transform playerRoot, womanRoot;
+    [SerializeField, Foldout("[Options]")] private float rotationSpeed = 3f, rotationLimitZ = .65f, eulerAngleLimitZ = 75f;
+    [SerializeField, Foldout("[Options]")] private int unhappinessThreshold = 2;
+    [SerializeField] private Transform playerRoot;
+    //[SerializeField] private Animator animator;
 
     private bool isTouchingScreen, canMove = true;
+    private int currentMoney;
 
     private Vector3 goCoord, worldOffsetPos;
     private Vector3 eulerLeft, eulerRight;
@@ -22,44 +23,69 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         InputObserver();
-        InitEulerLimits();
-    }
+        SetEulerLimits();
 
-    private void InitEulerLimits()
-    {
-        eulerLeft = new Vector3(
-            playerRoot.localEulerAngles.x, playerRoot.localEulerAngles.y, 75f
-        );
-        eulerRight = new Vector3(
-            playerRoot.localEulerAngles.x, playerRoot.localEulerAngles.y, -75f
-        );
+        currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY, 0);
     }
-
-    private void Update()
+    protected override void Update()
     {
-        HandleMovement();
+        base.Update();
         CheckRotationLimits();
-    }
 
-    private void CheckRotationLimits()
-    {
-        if (playerRoot.rotation.z > 0.65f) playerRoot.localEulerAngles = eulerLeft;
-        if (playerRoot.rotation.z < -0.65f) playerRoot.localEulerAngles = eulerRight;
-    }
 
-    private void HandleMovement()
-    {
-        transform.position += movementSpeed * Time.deltaTime * transform.forward;
     }
-
     private void OnTriggerEnter(Collider collision)
     {
         Collectible collectible = collision.GetComponentInParent<Collectible>();
 
-        if (collectible == null) return;
+        if (collectible != null)
+        {
+            CheckCanCollect(collectible); //have enough money?
+        }
 
-        //Destroy(collision.GetComponentInParent<Transform>().gameObject);
+        Exit exit = collision.GetComponentInParent<Exit>();
+        if (exit != null)
+        {
+            PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS,
+                PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1);
+            CheckUnhappiness();
+        }
     }
+
+    private void CheckUnhappiness()
+    {
+        if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) >= unhappinessThreshold)
+        {
+            Debug.Log("gameOver");
+        }
+        //TODO: FX
+    }
+
+    private void CheckCanCollect(Collectible collectible)
+    {
+        int collectibleMoney = collectible.GetCollectibleMoney();
+
+        if (currentMoney + collectibleMoney < 0) return;
+
+        currentMoney += collectibleMoney;
+        PlayerPrefs.SetInt(StringData.PREF_MONEY, currentMoney);
+        PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
+    }
+
+    #region Rotation
+    private void SetEulerLimits()
+    {
+        var localEulerAngles = playerRoot.localEulerAngles;
+
+        eulerLeft = new Vector3(localEulerAngles.x, localEulerAngles.y, eulerAngleLimitZ);
+        eulerRight = new Vector3(localEulerAngles.x, localEulerAngles.y, -eulerAngleLimitZ);
+    }
+    private void CheckRotationLimits()
+    {
+        if (playerRoot.rotation.z > rotationLimitZ) playerRoot.localEulerAngles = eulerLeft;
+        if (playerRoot.rotation.z < -rotationLimitZ) playerRoot.localEulerAngles = eulerRight;
+    }
+    #endregion
 
     #region Input
     private void InputObserver()
@@ -106,8 +132,8 @@ public class PlayerController : MonoBehaviour
 
     private void SlideRotateZ(float delta)
     {
-        if (playerRoot.rotation.z > 0.6f && delta > 0f) return;
-        if (playerRoot.rotation.z < -0.6f && delta < 0f) return;
+        if (playerRoot.rotation.z > rotationLimitZ && delta > 0f) return;
+        if (playerRoot.rotation.z < -rotationLimitZ && delta < 0f) return;
 
         //if (playerRoot.rotation.z + delta * 0.010 > 0.65f) return;
         //if (playerRoot.rotation.z + delta * 0.010 < -0.65f) return;

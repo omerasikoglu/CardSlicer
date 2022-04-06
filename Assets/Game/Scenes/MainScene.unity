@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &29189636
 Transform:
   m_ObjectHideFlags: 0
@@ -169,6 +169,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   woman: {fileID: 2123147320}
+  collectibleType: 1
+  currentUnhappiness: 0
+  unhappinessThreshold: 2
+  unhappinessTimerMax: 0
+  boxCollider: {fileID: 0}
+  sphereCollider: {fileID: 0}
 --- !u!54 &29189638
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -406,7 +412,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f4b4bc49a24e60e44a354b622c838e84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -629,7 +635,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &407579183
 Transform:
   m_ObjectHideFlags: 0
@@ -658,6 +664,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   woman: {fileID: 2123147320}
+  collectibleType: 3
+  currentUnhappiness: 0
+  unhappinessThreshold: 2
+  unhappinessTimerMax: 0
+  boxCollider: {fileID: 0}
+  sphereCollider: {fileID: 0}
 --- !u!54 &407579185
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -782,7 +794,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f4b4bc49a24e60e44a354b622c838e84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1265,6 +1277,7 @@ GameObject:
   - component: {fileID: 975794582}
   - component: {fileID: 975794581}
   - component: {fileID: 975794580}
+  - component: {fileID: 975794583}
   m_Layer: 0
   m_Name: visual
   m_TagString: Collectible
@@ -1318,7 +1331,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f4b4bc49a24e60e44a354b622c838e84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1348,6 +1361,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 975794578}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!135 &975794583
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 975794578}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &984399176
 GameObject:
   m_ObjectHideFlags: 0
@@ -1413,7 +1439,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 19b78b816b24a7347afee5ad861c3825, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1460,7 +1486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &998492053
 Transform:
   m_ObjectHideFlags: 0
@@ -1489,6 +1515,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   woman: {fileID: 2123147320}
+  collectibleType: 4
+  currentUnhappiness: 0
+  unhappinessThreshold: 2
+  unhappinessTimerMax: 0
+  boxCollider: {fileID: 0}
+  sphereCollider: {fileID: 0}
 --- !u!54 &998492055
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2097,14 +2129,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9ec6028c638be148a37aa44901ac61a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 2
   inputManager: {fileID: 426093766}
   isSlideMovementYActive: 0
   isSlideMovementXActive: 0
   isSlideRotateZActive: 1
-  movementSpeed: 2
   rotationSpeed: 3
+  rotationLimitZ: 0.65
+  eulerAngleLimitZ: 75
   playerRoot: {fileID: 1316445117}
-  womanRoot: {fileID: 2123147320}
 --- !u!54 &1656313366
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2292,7 +2325,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2022846701}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.58, y: 1.95, z: 3.16}
+  m_LocalPosition: {x: -1.16, y: 2.5, z: 3.16}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 975794579}
@@ -2312,6 +2345,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   woman: {fileID: 2123147320}
+  collectibleType: 1
+  currentUnhappiness: 0
+  unhappinessThreshold: 2
+  unhappinessTimerMax: 0
+  boxCollider: {fileID: 975794580}
+  sphereCollider: {fileID: 975794583}
 --- !u!54 &2022846704
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2345,7 +2384,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2040154349
 Transform:
   m_ObjectHideFlags: 0
@@ -2354,7 +2393,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2040154348}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.58, y: 1.95, z: 9.35}
+  m_LocalPosition: {x: -0.58, y: 2.5, z: 9.35}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 168405484}
@@ -2374,6 +2413,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   woman: {fileID: 2123147320}
+  collectibleType: 1
+  currentUnhappiness: 0
+  unhappinessThreshold: 2
+  unhappinessTimerMax: 0
+  boxCollider: {fileID: 0}
+  sphereCollider: {fileID: 0}
 --- !u!54 &2040154351
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2500,6 +2545,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2114544109}
+  - component: {fileID: 2114544108}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2507,6 +2553,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2114544108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114544107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f31642b618373684a95440281b86b575, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2114544109
 Transform:
   m_ObjectHideFlags: 0
@@ -2566,3 +2624,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 2
+  collectibleParts: []

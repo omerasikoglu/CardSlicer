@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WomanController : MonoBehaviour
+public class WomanController : Model
 {
-    [SerializeField] private float movementSpeed = 2f;
-    void Update()
-    {
-        transform.position += movementSpeed * Time.deltaTime * transform.forward;
-    }
+   
+    [SerializeField] private List<Transform> collectibleParts;
 }
