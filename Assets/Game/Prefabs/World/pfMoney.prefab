@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 2480181857721028543}
   - component: {fileID: 2480181857721028512}
   m_Layer: 0
-  m_Name: Collectible
+  m_Name: CollectibleRoot
   m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -197,11 +197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  woman: {fileID: 0}
   collectibleType: 1
-  currentUnhappiness: 0
-  unhappinessThreshold: 2
-  unhappinessTimerMax: 0
+  hasExit: 1
   exit: {fileID: 2480181856914326276}
 --- !u!54 &2480181857721028512
 Rigidbody:

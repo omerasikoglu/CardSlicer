@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Threading.Tasks;
+using NaughtyAttributes;
 
 [Serializable]
 public enum CollectibleType
@@ -20,12 +21,15 @@ public enum CollectibleType
 public class Collectible : MonoBehaviour
 {
     [SerializeField] private CollectibleType collectibleType;
-    [SerializeField] private GameObject exit;
+
+    [SerializeField] private bool hasExit;
+    [SerializeField, EnableIf("hasExit")] private GameObject exit;
     private Transform womanTransform;
 
     private void Awake()
     {
         womanTransform = womanTransform != null ? womanTransform : FindObjectOfType<WomanController>().transform;
+        if(!hasExit) Destroy(exit);
     }
 
     public int GetCollectibleMoney()
@@ -48,27 +52,23 @@ public class Collectible : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        PlayerController player = collision.GetComponentInParent<PlayerController>();
-
-        if (player != null)
-        {
-            Destroy(exit);
-            SetCollectibleTasks();
-        }
-
         WomanController womanController = collision.GetComponentInParent<WomanController>();
         if (womanController != null)
         {
+            womanController.EnableWomanPart(collectibleType);
+
             Transform woman = womanController.GetComponent<Transform>();
             woman.DOScaleY(woman.localScale.y + 0.5f, 1f).SetEase(Ease.InBounce);
             Destroy(gameObject);
         }
     }
 
-   
 
-    private async void SetCollectibleTasks()
+
+    public async void SetCollectibleTasks()
     {
+        if(hasExit) Destroy(exit);
+
         var position = transform.position;
         Vector3 womanPosDelta = new Vector3(0f, 0f, 2.5f); //womanTransform's pos after 1 sec delay
 

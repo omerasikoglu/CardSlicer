@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Card
   - Collectible
+  - Exit
   layers:
   - Default
   - TransparentFX

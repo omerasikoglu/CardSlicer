@@ -40,10 +40,18 @@ public class PlayerController : Model
 
         if (collectible != null)
         {
-            CheckCanCollect(collectible); //have enough money?
+            if (AffordMoney(collectible))
+            {
+                collectible.SetCollectibleTasks();
+            }
+            else
+            {
+                //TODO: NOT ENOUGH MONEY FX
+            }
         }
 
         Exit exit = collision.GetComponentInParent<Exit>();
+
         if (exit != null)
         {
             PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS,
@@ -58,18 +66,24 @@ public class PlayerController : Model
         {
             Debug.Log("gameOver");
         }
-        //TODO: FX
+        //TODO: UNHAPPINESS FX
     }
 
-    private void CheckCanCollect(Collectible collectible)
+    private bool AffordMoney(Collectible collectible)
     {
         int collectibleMoney = collectible.GetCollectibleMoney();
 
-        if (currentMoney + collectibleMoney < 0) return;
+        if (currentMoney + collectibleMoney < 0)
+        {
+            Debug.Log("yeterli paran yok");
+            //TODO: not enough money
+            return false;
+        }
 
         currentMoney += collectibleMoney;
         PlayerPrefs.SetInt(StringData.PREF_MONEY, currentMoney);
         PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
+        return true;
     }
 
     #region Rotation
