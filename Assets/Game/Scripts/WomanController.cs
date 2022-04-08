@@ -9,13 +9,13 @@ public class WomanController : Model
 
     [SerializeField] private List<Transform> collectiblePartList;
     [SerializeField] private List<ParticleSystem> particleList; //0=>good, 1=>bad, 2=>lose
-    [SerializeField] private Transform fxRoot;
 
     private void Awake()
     {
         DisableAllWomanParts();
     }
 
+    #region Anim
     private void DisableAllWomanParts()
     {
         foreach (Transform part in collectiblePartList)
@@ -27,12 +27,31 @@ public class WomanController : Model
     public void EnableWomanPart(CollectibleType type)
     {
         collectiblePartList[(int)type].gameObject.SetActive(true);
-        particleList[0].Play();
-    }
+    } 
+    #endregion
 
-    [Button]
-    void st()
+    #region FX
+    public void PlayGoodFX()
     {
+        PlayFX(particleList[0]);
     }
+    public void PlayBadFX()
+    {
+        PlayFX(particleList[1]);
+    }
+    public void PlayLoseFX()
+    {
+        PlayFX(particleList[2]);
+    }
+    private void PlayFX(ParticleSystem particle, int isOldEmitPending = 0)
+    {
+        //isOldEmitPending => 0 stop instantly
+        foreach (ParticleSystem st in particleList)
+        {
+            st.Stop(true, (ParticleSystemStopBehavior)isOldEmitPending);
+        }
+        particle.Play();
+    } 
+    #endregion
 
 }

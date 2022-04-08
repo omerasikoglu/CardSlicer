@@ -11,4 +11,10 @@ public struct StringData
     public const string EXIT = "Exit";
     public const string PLAYER = "Player";
 
+    //UI
+    public const string BAR = "bar";
+
+    //Naughty
+    public const string OPTIONS = "[Options]";
+
 }

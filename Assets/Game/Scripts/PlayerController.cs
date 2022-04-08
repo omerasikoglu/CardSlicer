@@ -7,11 +7,15 @@ using DG.Tweening;
 
 public class PlayerController : Model
 {
-    [SerializeField, Foldout("[Input]")] private InputManager inputManager;
-    [SerializeField, Foldout("[Input]")] private bool isSlideMovementYActive, isSlideMovementXActive, isSlideRotateZActive;
     [SerializeField, Foldout("[Options]")] private float rotationSpeed = 3f, rotationLimitZ = .65f, eulerAngleLimitZ = 75f;
     [SerializeField, Foldout("[Options]")] private int unhappinessThreshold = 2;
+    [SerializeField, Foldout("[Input]")] private InputManager inputManager;
+    [SerializeField, Foldout("[Input]")] private bool isSlideMovementYActive, isSlideMovementXActive, isSlideRotateZActive;
+   
     [SerializeField] private Transform playerRoot;
+    [SerializeField] private WomanController womanController;
+    [SerializeField] private BoxCollider cardCollider;
+
     //[SerializeField] private Animator animator;
 
     private bool isTouchingScreen, canMove = true;
@@ -31,59 +35,62 @@ public class PlayerController : Model
     {
         base.Update();
         CheckRotationLimits();
-
-
+        DrawRay();
     }
+
+    private void DrawRay()
+    {
+       
+    }
+
     private void OnTriggerEnter(Collider collision)
     {
         Collectible collectible = collision.GetComponentInParent<Collectible>();
 
         if (collectible != null)
         {
-            if (AffordMoney(collectible))
-            {
-                collectible.SetCollectibleTasks();
-            }
-            else
-            {
-                //TODO: NOT ENOUGH MONEY FX
-            }
+            AffordMoney(collectible);
         }
 
         Exit exit = collision.GetComponentInParent<Exit>();
 
         if (exit != null)
         {
-            PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS,
-                PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1);
-            CheckUnhappiness();
+            IncreaseUnhappiness();
         }
     }
-
-    private void CheckUnhappiness()
+    private void AffordMoney(Collectible collectible)
     {
-        if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) >= unhappinessThreshold)
-        {
-            Debug.Log("gameOver");
-        }
-        //TODO: UNHAPPINESS FX
-    }
+        int moneyAmount = collectible.GetMoneyAmountOfCollectible();
 
-    private bool AffordMoney(Collectible collectible)
-    {
-        int collectibleMoney = collectible.GetCollectibleMoney();
-
-        if (currentMoney + collectibleMoney < 0)
+        if (currentMoney + moneyAmount < 0)
         {
-            Debug.Log("yeterli paran yok");
-            //TODO: not enough money
-            return false;
+            //Debug.Log("yeterli paran yok");
+            womanController.PlayBadFX();
+            return;
         }
 
-        currentMoney += collectibleMoney;
+        if (moneyAmount >= 0 && PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) > 0) UnhappinessBar.Instance.ResetBar();
+
+        currentMoney += moneyAmount;
         PlayerPrefs.SetInt(StringData.PREF_MONEY, currentMoney);
         PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
-        return true;
+
+        womanController.PlayGoodFX();
+        collectible.PlayCollectibleTasks();
+    }
+    private void IncreaseUnhappiness()
+    {
+        UnhappinessBar.Instance.IncreaseUnhappiness();
+
+        if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) < unhappinessThreshold)
+        {
+            womanController.PlayBadFX();
+        }
+        else
+        {
+            womanController.PlayLoseFX();
+        }
     }
 
     #region Rotation

@@ -32,7 +32,7 @@ public class Collectible : MonoBehaviour
         if(!hasExit) Destroy(exit);
     }
 
-    public int GetCollectibleMoney()
+    public int GetMoneyAmountOfCollectible()
     {
         return collectibleType switch
         {
@@ -63,9 +63,7 @@ public class Collectible : MonoBehaviour
         }
     }
 
-
-
-    public async void SetCollectibleTasks()
+    public async void PlayCollectibleTasks()
     {
         if(hasExit) Destroy(exit);
 
