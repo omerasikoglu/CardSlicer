@@ -14,6 +14,10 @@ public struct StringData
     //UI
     public const string BAR = "bar";
 
+    //Hierarchy
+    public const string ALIVE = "alive";
+    public const string BROKEN = "broken";
+
     //Naughty
     public const string OPTIONS = "[Options]";
 

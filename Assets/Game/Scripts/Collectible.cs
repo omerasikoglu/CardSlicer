@@ -22,14 +22,25 @@ public class Collectible : MonoBehaviour
 {
     [SerializeField] private CollectibleType collectibleType;
 
-    [SerializeField] private bool hasExit;
+    [SerializeField] private bool hasExit, isFallingDown;
     [SerializeField, EnableIf("hasExit")] private GameObject exit;
-    private Transform womanTransform;
+
+    private Rigidbody rbAlive, rbBroken;
+    private Transform womanTransform, alive, broken;
 
     private void Awake()
     {
+        Init();
+        if (!hasExit) Destroy(exit);
+    }
+
+    private void Init()
+    {
+        rbAlive = transform.Find(StringData.ALIVE).GetComponent<Rigidbody>();
+        rbBroken = transform.Find(StringData.BROKEN).GetComponent<Rigidbody>();
+        alive = GetComponentInChildren<Transform>().Find(StringData.ALIVE);
+        broken = GetComponentInChildren<Transform>().Find(StringData.BROKEN);
         womanTransform = womanTransform != null ? womanTransform : FindObjectOfType<WomanController>().transform;
-        if(!hasExit) Destroy(exit);
     }
 
     public int GetMoneyAmountOfCollectible()
@@ -65,7 +76,14 @@ public class Collectible : MonoBehaviour
 
     public async void PlayCollectibleTasks()
     {
-        if(hasExit) Destroy(exit);
+        if (hasExit) Destroy(exit);
+
+        if (isFallingDown) //Breaking Collectible
+        {
+            alive.gameObject.SetActive(false);
+            broken.gameObject.SetActive(true);
+            return;
+        }
 
         var position = transform.position;
         Vector3 womanPosDelta = new Vector3(0f, 0f, 2.5f); //womanTransform's pos after 1 sec delay
