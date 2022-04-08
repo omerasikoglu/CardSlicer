@@ -11,13 +11,14 @@ public class PlayerController : Model
     [SerializeField, Foldout("[Options]")] private int unhappinessThreshold = 2;
     [SerializeField, Foldout("[Input]")] private InputManager inputManager;
     [SerializeField, Foldout("[Input]")] private bool isSlideMovementYActive, isSlideMovementXActive, isSlideRotateZActive;
-   
+
     [SerializeField] private Transform playerRoot;
     [SerializeField] private WomanController womanController;
-    [SerializeField] private BoxCollider cardCollider;
+
+    private BoxCollider cardCollider;
+    [SerializeField, SortingLayer] private LayerMask targetLayerMask;
 
     //[SerializeField] private Animator animator;
-
     private bool isTouchingScreen, canMove = true;
     private int currentMoney;
 
@@ -30,19 +31,63 @@ public class PlayerController : Model
         SetEulerLimits();
 
         currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY, 0);
+        cardCollider = transform.GetComponentInChildren<BoxCollider>();
     }
     protected override void Update()
     {
         base.Update();
         CheckRotationLimits();
-        DrawRay();
     }
 
-    private void DrawRay()
+    private void FixedUpdate()
     {
-       
+        //Lighto();
     }
 
+    private void Lighto()
+    {
+        Bounds bounds = cardCollider.bounds;
+        float rayLength = 5f;
+
+        bool isHitCollectible = Physics.BoxCast(
+            center: new Vector3(bounds.center.x, bounds.center.y, bounds.max.z),
+            halfExtents: bounds.extents,
+            direction: Vector3.forward,
+            orientation: Quaternion.identity,
+            maxDistance: rayLength,
+            layerMask: targetLayerMask
+            );
+
+        Color rayColor = isHitCollectible ? Color.green : Color.red;
+
+        DrawSquareRay(cardCollider.bounds, Vector3.forward, rayLength, rayColor);
+
+
+    }
+
+    private void DrawSquareRay(Bounds bounds, Vector3 dir, float rayLength, Color rayColor)
+    {
+        Debug.DrawRay( //top right
+            start: bounds.max,
+            dir: dir * rayLength,
+            color: rayColor
+        );
+        Debug.DrawRay( //top left
+            start: new Vector3(bounds.min.x, bounds.max.y, bounds.max.z),
+            dir: dir * rayLength,
+            color: rayColor
+        );
+        Debug.DrawRay( //bottom right
+            start: new Vector3(bounds.max.x, bounds.min.y, bounds.max.z),
+            dir: dir * rayLength,
+            color: rayColor
+        );
+        Debug.DrawRay( //bottom left
+            start: new Vector3(bounds.min.x, bounds.min.y, bounds.max.z),
+            dir: dir * rayLength,
+            color: rayColor
+        );
+    }
     private void OnTriggerEnter(Collider collision)
     {
         Collectible collectible = collision.GetComponentInParent<Collectible>();

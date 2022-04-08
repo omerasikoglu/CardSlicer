@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7714218015754812635}
   - component: {fileID: 3222625296290972728}
   - component: {fileID: 7298635985799070612}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: visual2
   m_TagString: Collectible
   m_Icon: {fileID: 0}
@@ -90,8 +90,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5094880612027739918}
-  - component: {fileID: 7468832868770216130}
-  m_Layer: 0
+  - component: {fileID: 551713947725366468}
+  m_Layer: 6
   m_Name: broken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ Transform:
   m_Father: {fileID: 2480181857721028542}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &7468832868770216130
+--- !u!54 &551713947725366468
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 2480181856607129285}
   - component: {fileID: 2480181856607129284}
   - component: {fileID: 3813195316272412548}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: alive
   m_TagString: Collectible
   m_Icon: {fileID: 0}
@@ -309,7 +309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2480181857721028542}
   - component: {fileID: 2480181857721028543}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CollectibleRoot
   m_TagString: Collectible
   m_Icon: {fileID: 0}
@@ -346,8 +346,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collectibleType: 1
   hasExit: 1
+  isFallingDown: 1
   exit: {fileID: 2480181856914326276}
-  sphere: {fileID: 0}
 --- !u!1 &2480181858334338690
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,9 +357,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2480181858334338691}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: pfMoney
-  m_TagString: Untagged
+  m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -391,7 +391,7 @@ GameObject:
   - component: {fileID: 8456890724096871996}
   - component: {fileID: 8080572806803041324}
   - component: {fileID: 2425669564591061369}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: visual1
   m_TagString: Collectible
   m_Icon: {fileID: 0}

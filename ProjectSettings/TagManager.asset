@@ -7,6 +7,7 @@ TagManager:
   - Card
   - Collectible
   - Exit
+  - Woman
   layers:
   - Default
   - TransparentFX

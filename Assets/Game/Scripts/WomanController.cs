@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -13,6 +14,19 @@ public class WomanController : Model
     private void Awake()
     {
         DisableAllWomanParts();
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        Debug.Log("in");
+        Collectible coll = collision.GetComponentInParent<Collectible>();
+        if (coll != null)
+        {
+            EnableWomanPart(coll.GetCollectionType());
+
+            transform.DOScaleY(transform.localScale.y + 0.5f, 1f).SetEase(Ease.InBounce);
+            Destroy(collision.gameObject);
+        }
     }
 
     #region Anim

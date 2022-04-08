@@ -21,11 +21,12 @@ public enum CollectibleType
 public class Collectible : MonoBehaviour
 {
     [SerializeField] private CollectibleType collectibleType;
+    public CollectibleType GetCollectionType() => collectibleType;
 
     [SerializeField] private bool hasExit, isFallingDown;
     [SerializeField, EnableIf("hasExit")] private GameObject exit;
 
-    private Rigidbody rbAlive, rbBroken;
+
     private Transform womanTransform, alive, broken;
 
     private void Awake()
@@ -36,8 +37,6 @@ public class Collectible : MonoBehaviour
 
     private void Init()
     {
-        rbAlive = transform.Find(StringData.ALIVE).GetComponent<Rigidbody>();
-        rbBroken = transform.Find(StringData.BROKEN).GetComponent<Rigidbody>();
         alive = GetComponentInChildren<Transform>().Find(StringData.ALIVE);
         broken = GetComponentInChildren<Transform>().Find(StringData.BROKEN);
         womanTransform = womanTransform != null ? womanTransform : FindObjectOfType<WomanController>().transform;
@@ -59,21 +58,6 @@ public class Collectible : MonoBehaviour
         };
     }
 
-
-
-    private void OnTriggerEnter(Collider collision)
-    {
-        WomanController womanController = collision.GetComponentInParent<WomanController>();
-        if (womanController != null)
-        {
-            womanController.EnableWomanPart(collectibleType);
-
-            Transform woman = womanController.GetComponent<Transform>();
-            woman.DOScaleY(woman.localScale.y + 0.5f, 1f).SetEase(Ease.InBounce);
-            Destroy(gameObject);
-        }
-    }
-
     public async void PlayCollectibleTasks()
     {
         if (hasExit) Destroy(exit);
@@ -82,6 +66,7 @@ public class Collectible : MonoBehaviour
         {
             alive.gameObject.SetActive(false);
             broken.gameObject.SetActive(true);
+            StartCoroutine(UtilsClass.Wait(() => { Destroy(transform.parent.gameObject); }, 1f));
             return;
         }
 
