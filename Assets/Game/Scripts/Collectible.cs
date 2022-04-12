@@ -5,45 +5,52 @@ using UnityEngine;
 using DG.Tweening;
 using System.Threading.Tasks;
 using NaughtyAttributes;
+using UnityEngine.AI;
 
 [Serializable]
-public enum CollectibleType
-{
-    Money = 1,
-    Purse = 2,
-    Dress = 3,
-    Shoes = 4,
-    Fur = 5,
-    Hair = 6,
-    Accessory = 7,
-    Car = 8,
+public enum CollectibleType {
+    Money = 1, Purse = 2, Dress = 3, Shoes = 4, Fur = 5, Hair = 6, Accessory = 7, Car = 8
 }
-public class Collectible : MonoBehaviour
-{
-    [SerializeField] private CollectibleType collectibleType;
+[Serializable] public enum DressVariant { Dress1 = 1, Dress2 = 2, Dress3 = 3, Dress4 = 4 }
+[Serializable] public enum HairVariant { Hair1 = 1, Hair2 = 2, Hair3 = 3 }
+[Serializable] public enum ShoesVariant { Shoes1 = 1, Shoes2 = 2, Shoes3 = 3 }
+[Serializable]
+public struct ItemDetails {
+    public CollectibleType type;
+    public DressVariant dress;
+    public ShoesVariant shoes;
+};
+
+public class Collectible : MonoBehaviour {
+    [SerializeField, BoxGroup("[Conditional]")] private CollectibleType collectibleType;
+    [SerializeField, EnableIf("Dress", CollectibleType.Dress), BoxGroup("[Conditional]")] private bool isDress;
+    [SerializeField, EnableIf("Hair", CollectibleType.Hair), BoxGroup("[Conditional]")] private bool isHair;
+    [SerializeField, EnableIf("Shoes", CollectibleType.Shoes), BoxGroup("[Conditional]")] private bool isShoes;
+
     public CollectibleType GetCollectionType() => collectibleType;
 
-    [SerializeField] private bool hasExit, isFallingDown;
-    [SerializeField, EnableIf("hasExit")] private GameObject exit;
+    [SerializeField] private bool isFallingDown;
+
+    [SerializeField, BoxGroup("[Exit]")] private bool hasExit;
+    [SerializeField, EnableIf("hasExit"), BoxGroup("[Exit]")] private GameObject exit;
+
+
 
 
     private Transform womanTransform, alive, broken;
 
-    private void Awake()
-    {
+    private void Awake() {
         Init();
         if (!hasExit) Destroy(exit);
     }
 
-    private void Init()
-    {
+    private void Init() {
         alive = GetComponentInChildren<Transform>().Find(StringData.ALIVE);
         broken = GetComponentInChildren<Transform>().Find(StringData.BROKEN);
         womanTransform = womanTransform != null ? womanTransform : FindObjectOfType<WomanController>().transform;
     }
 
-    public int GetMoneyAmountOfCollectible()
-    {
+    public int GetMoneyAmountOfCollectible() {
         return collectibleType switch
         {
             (CollectibleType)1 => 100,
@@ -58,8 +65,7 @@ public class Collectible : MonoBehaviour
         };
     }
 
-    public async void PlayCollectibleTasks()
-    {
+    public async void PlayCollectibleTasks() {
         if (hasExit) Destroy(exit);
 
         if (isFallingDown) //Breaking Collectible
