@@ -20,7 +20,6 @@ public class PlayerController : Model
 
     //[SerializeField] private Animator animator;
     private bool isTouchingScreen, canMove = true;
-    private int currentMoney;
 
     private Vector3 goCoord, worldOffsetPos;
     private Vector3 eulerLeft, eulerRight;
@@ -30,7 +29,6 @@ public class PlayerController : Model
         InputObserver();
         SetEulerLimits();
 
-        currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY, 0);
         cardCollider = transform.GetComponentInChildren<BoxCollider>();
     }
     protected override void Update()
@@ -94,23 +92,26 @@ public class PlayerController : Model
 
         if (collectible != null)
         {
+            Debug.Log("collected");
             AffordMoney(collectible);
         }
 
-        Exit exit = collision.GetComponentInParent<Exit>();
+        //Exit exit = collision.GetComponentInParent<Exit>();
 
-        if (exit != null)
+        if (collision.CompareTag("Exit"))
         {
+            Debug.Log("exit");
             IncreaseUnhappiness();
         }
     }
     private void AffordMoney(Collectible collectible)
     {
-        int moneyAmount = collectible.GetMoneyAmountOfCollectible();
+        int moneyAmount = collectible.GetItemDetails().money;
+        int currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY, 0);
 
         if (currentMoney + moneyAmount < 0)
         {
-            //Debug.Log("yeterli paran yok");
+            Debug.Log("yeterli paran yok");
             womanController.PlayBadFX();
             return;
         }
