@@ -6,6 +6,7 @@ using DG.Tweening;
 using System.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine.AI;
+using Random = System.Random;
 
 #region ItemType
 [Serializable]
@@ -87,11 +88,12 @@ public class Collectible : MonoBehaviour {
 
         var position = transform.position;
         Vector3 womanPosDelta = new Vector3(0f, 2f, 2.5f); //womanTransform's pos after 1 sec delay
-
+        
+        float height = UnityEngine.Random.Range(2f, 3f), ascendTime = UnityEngine.Random.Range(.6f, .8f);
         List<Task> taskList = new List<Task>
         {
-            transform.DOMoveZ(position.z + 5f, .7f).AsyncWaitForCompletion(),
-            transform.DOMoveY(position.y + 2f, .7f).AsyncWaitForCompletion()
+            transform.DOMoveZ(position.z + 5f, ascendTime).AsyncWaitForCompletion(),
+            transform.DOMoveY(position.y + height, ascendTime).AsyncWaitForCompletion()
         };
         await Task.WhenAll(taskList);
         taskList.Add(transform.DOScale(Vector3.one * 1.5f, .3f).AsyncWaitForCompletion());

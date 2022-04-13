@@ -21,7 +21,7 @@ public class WomanController : Model {
     [SerializeField] private List<Transform> necklaceList;
     [SerializeField] private List<Transform> ringList;
 
-    [SerializeField] private List<ParticleSystem> particleList; //0=>good, 1=>bad, 2=>lose
+    [SerializeField] private List<ParticleSystem> particleList; //0=>good, 1=>bad, 2=>lose, 3=>hanabi
 
     private void Awake() {
         InitItems();
@@ -99,7 +99,7 @@ public class WomanController : Model {
             SetDeactivateListComponents(hairList);
             hairList[(int)hair - 1].gameObject.SetActive(true);
         }
-        else if (shoes != 0 && shoes!=ShoesVariant.None)
+        else if (shoes != 0 && shoes != ShoesVariant.None)
         {
             SetDeactivateListComponents(shoesList);
             shoesList[(int)shoes - 1].gameObject.SetActive(true);
@@ -123,6 +123,7 @@ public class WomanController : Model {
             ringList[0].gameObject.SetActive(true);
         }
 
+        PlayHanabiFX();
     }
 
     private void SetDeactivateListComponents(List<Transform> list) {
@@ -134,15 +135,11 @@ public class WomanController : Model {
     }
 
     #region FX
-    public void PlayGoodFX() {
-        PlayFX(particleList[0]);
-    }
-    public void PlayBadFX() {
-        PlayFX(particleList[1]);
-    }
-    public void PlayLoseFX() {
-        PlayFX(particleList[2]);
-    }
+    public void PlayGoodFX() => PlayFX(particleList[0]);
+    public void PlayBadFX() => PlayFX(particleList[1]);
+    public void PlayLoseFX() => PlayFX(particleList[2]);
+    private void PlayHanabiFX() => PlayFX(particleList[3], 1);
+
     private void PlayFX(ParticleSystem particle, int isOldEmitPending = 0) {
         //isOldEmitPending => 0 stop instantly
         foreach (ParticleSystem st in particleList)
