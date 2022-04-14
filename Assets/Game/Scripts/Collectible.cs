@@ -5,7 +5,6 @@ using UnityEngine;
 using DG.Tweening;
 using System.Threading.Tasks;
 using NaughtyAttributes;
-using UnityEngine.AI;
 using Random = System.Random;
 
 #region ItemType
@@ -45,10 +44,10 @@ public struct ItemDetails {
             (CollectibleType)1 => 100,
             (CollectibleType)2 => -200,
             (CollectibleType)3 => -50,
-            (CollectibleType)4 => -150,
-            (CollectibleType)5 => -50,
-            (CollectibleType)6 => -100,
-            (CollectibleType)7 => -250,
+            (CollectibleType)4 => -100,
+            (CollectibleType)5 => -150,
+            (CollectibleType)6 => -150,
+            (CollectibleType)7 => -300,
             (CollectibleType)8 => -300,
             _ => 0,
         };
@@ -67,6 +66,9 @@ public class Collectible : MonoBehaviour {
     private void Awake() {
         Init();
         if (!hasExit) Destroy(exit);
+        float i = UnityEngine.Random.Range(1f, 2f);
+        transform.GetComponentInParent<Rigidbody>().transform.
+            DOMoveY(transform.position.y + .2f, i).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
     private void Init() {
@@ -96,7 +98,7 @@ public class Collectible : MonoBehaviour {
             transform.DOMoveY(position.y + height, ascendTime).AsyncWaitForCompletion()
         };
         await Task.WhenAll(taskList);
-        taskList.Add(transform.DOScale(Vector3.one * 1.5f, .3f).AsyncWaitForCompletion());
+        taskList.Add(transform.DOScale(transform.localScale * 2f, .3f).AsyncWaitForCompletion());
         taskList.Add(transform.DORotate(new Vector3(0f, 90f, 0f), 1f).AsyncWaitForCompletion());
         await Task.WhenAll(taskList);
         taskList.Add(transform.DOMove(womanTransform.position + womanPosDelta, 1f).AsyncWaitForCompletion());

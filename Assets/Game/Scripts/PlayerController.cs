@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using NaughtyAttributes;
 using DG.Tweening;
+using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : Model {
     [SerializeField, Foldout("[Options]")] private float rotationSpeed = 3f, rotationLimitZ = .65f, eulerAngleLimitZ = 75f;
@@ -16,6 +18,8 @@ public class PlayerController : Model {
 
     private BoxCollider cardCollider;
     [SerializeField, SortingLayer] private LayerMask targetLayerMask;
+    [SerializeField] private TextMeshProUGUI textMesh;
+    [SerializeField] private Material emissionMaterial;
 
     //[SerializeField] private Animator animator;
     private bool isTouchingScreen, canMove = true;
@@ -40,7 +44,7 @@ public class PlayerController : Model {
 
     private void Lighto() {
         Bounds bounds = cardCollider.bounds;
-        float rayLength = 5f;
+        float rayLength = 2f;
 
         bool isHitCollectible = Physics.BoxCast(
             center: new Vector3(bounds.center.x, bounds.center.y, bounds.max.z),
@@ -52,13 +56,12 @@ public class PlayerController : Model {
             );
 
         Color rayColor = isHitCollectible ? Color.green : Color.red;
-
-        DrawSquareRay(cardCollider.bounds, Vector3.forward, rayLength, rayColor);
-
+        emissionMaterial.SetColor("_EmissionColor", rayColor);
+        DrawRectangleRay(cardCollider.bounds, Vector3.forward, rayLength, rayColor);
 
     }
 
-    private void DrawSquareRay(Bounds bounds, Vector3 dir, float rayLength, Color rayColor) {
+    private void DrawRectangleRay(Bounds bounds, Vector3 dir, float rayLength, Color rayColor) {
         Debug.DrawRay( //top right
             start: bounds.max,
             dir: dir * rayLength,
@@ -111,6 +114,7 @@ public class PlayerController : Model {
         currentMoney += moneyAmount;
         PlayerPrefs.SetInt(StringData.PREF_MONEY, currentMoney);
         PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
+        textMesh.SetText($"{PlayerPrefs.GetInt(StringData.PREF_MONEY)}$");
 
         womanController.PlayGoodFX();
         collectible.PlayCollectibleTasks();

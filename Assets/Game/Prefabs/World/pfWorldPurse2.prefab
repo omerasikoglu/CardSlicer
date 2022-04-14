@@ -253,6 +253,7 @@ GameObject:
   - component: {fileID: 5691289276485419737}
   - component: {fileID: 8981201431267669633}
   - component: {fileID: 677199594522895619}
+  - component: {fileID: 7387135652273949069}
   m_Layer: 0
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -336,6 +337,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.25505254, y: 0.29134765, z: 0.1351181}
   m_Center: {x: 0, y: -0.14226528, z: -0.00037552044}
+--- !u!114 &7387135652273949069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6734202677807259533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 5
+    dress: 5
+    hair: 4
+    shoes: 4
+    purse: 2
+    watch: 4
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 3990995016851010488}
 --- !u!1 &8078554760308516857
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,7 +369,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8078554760308516854}
   - component: {fileID: 4169923923944624054}
-  - component: {fileID: 3294096924776738126}
   m_Layer: 0
   m_Name: pfWorldPurse2
   m_TagString: Untagged
@@ -386,28 +408,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3294096924776738126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8078554760308516857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 5
-    dress: 5
-    hair: 4
-    shoes: 4
-    purse: 2
-    watch: 4
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 3990995016851010488}
 --- !u!1 &8084555699955149780
 GameObject:
   m_ObjectHideFlags: 0

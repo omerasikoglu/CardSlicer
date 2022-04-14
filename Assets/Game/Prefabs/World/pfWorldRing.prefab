@@ -117,7 +117,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5369122848688668836}
   - component: {fileID: 234387013206288612}
-  - component: {fileID: 1668801070303365660}
   m_Layer: 0
   m_Name: pfWorldRing
   m_TagString: Untagged
@@ -157,28 +156,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1668801070303365660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5369122848688668843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 7
-    dress: 5
-    hair: 4
-    shoes: 4
-    purse: 4
-    watch: 4
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 1007929844752536810}
 --- !u!1 &6906793213942794410
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,6 +268,7 @@ GameObject:
   - component: {fileID: 8387316011087963531}
   - component: {fileID: 5061374274381484499}
   - component: {fileID: 7105266921283531868}
+  - component: {fileID: 2059932400652920492}
   m_Layer: 6
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -374,6 +352,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2154084, y: 0.48577255, z: 0.39547595}
   m_Center: {x: -0.000000011175874, y: 0.04514829, z: 0}
+--- !u!114 &2059932400652920492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7487955316216232159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 7
+    dress: 5
+    hair: 4
+    shoes: 4
+    purse: 4
+    watch: 4
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 1007929844752536810}
 --- !u!1 &9052167302002779170
 GameObject:
   m_ObjectHideFlags: 0

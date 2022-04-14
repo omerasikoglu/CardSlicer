@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 952697351492950174}
   - component: {fileID: 4970540526631973086}
-  - component: {fileID: 5805870280707248678}
   m_Layer: 0
   m_Name: pfWorldDress4
   m_TagString: Untagged
@@ -50,28 +49,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5805870280707248678
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 952697351492950161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 2
-    dress: 4
-    hair: 4
-    shoes: 4
-    purse: 4
-    watch: 4
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 5352175367363333328}
 --- !u!1 &1609809360009293296
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +85,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.29}
+  m_AnchoredPosition: {x: 0, y: 0.73}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &747967832617197590
@@ -184,6 +161,7 @@ GameObject:
   - component: {fileID: 3737959654688095665}
   - component: {fileID: 110268849336338921}
   - component: {fileID: 8033909586891236169}
+  - component: {fileID: 8682751766937947066}
   m_Layer: 0
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -198,13 +176,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2328592277727092965}
-  m_LocalRotation: {x: -0.70044, y: -0.22196615, z: 0.5628957, w: 0.37850136}
-  m_LocalPosition: {x: 0.0061451187, y: 0.06532032, z: -0.053332895}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 2233089643409415375}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -16.281, y: 265.233, z: -230.162}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &3737959654688095665
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -267,6 +245,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.4246142, y: 0.76546943, z: 0.3520698}
   m_Center: {x: -0.0010489274, y: -0.20548959, z: -0.027302206}
+--- !u!114 &8682751766937947066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2328592277727092965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 2
+    dress: 4
+    hair: 4
+    shoes: 4
+    purse: 4
+    watch: 4
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 5352175367363333328}
 --- !u!1 &3288830770892133941
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +426,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5352175367363333328}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.342, y: 3.58, z: 0.324}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 622577706576450297}
@@ -469,15 +469,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7799029804609835447}
-  m_LocalRotation: {x: -0.55081683, y: 0.39199293, z: -0.68177587, w: -0.27950683}
-  m_LocalPosition: {x: -3.270018, y: 4.019935, z: 0.2161874}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3751399658227106064}
   - {fileID: 8831300838194603341}
   m_Father: {fileID: 952697351492950174}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 57.396, y: 80.828, z: -174.6}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8663430207931134743
 GameObject:
   m_ObjectHideFlags: 0

@@ -234,7 +234,7 @@ Transform:
   m_GameObject: {fileID: 3530215783182801953}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7550784886752447622}
   - {fileID: 2758865534724368603}
@@ -351,7 +351,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5908381818739217672}
   - component: {fileID: 1746420849033248072}
-  - component: {fileID: 888608281662005168}
   m_Layer: 0
   m_Name: pfWorldDress2
   m_TagString: Untagged
@@ -391,28 +390,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &888608281662005168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5908381818739217671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 2
-    dress: 2
-    hair: 4
-    shoes: 4
-    purse: 4
-    watch: 4
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 1621542053280940358}
 --- !u!1 &8977559249857457523
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,6 +402,7 @@ GameObject:
   - component: {fileID: 8005577439697596455}
   - component: {fileID: 6719828227354346623}
   - component: {fileID: 3726815486179241695}
+  - component: {fileID: 8362587095694530758}
   m_Layer: 0
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -441,7 +419,7 @@ Transform:
   m_GameObject: {fileID: 8977559249857457523}
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children: []
   m_Father: {fileID: 4772663279286161753}
   m_RootOrder: 0
@@ -508,3 +486,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.44826785, y: 0.75439644, z: 0.36080456}
   m_Center: {x: 0.0052985386, y: 0.0028533489, z: -0.028065942}
+--- !u!114 &8362587095694530758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8977559249857457523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 2
+    dress: 2
+    hair: 4
+    shoes: 4
+    purse: 4
+    watch: 4
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 1621542053280940358}

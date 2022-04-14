@@ -117,7 +117,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5488915905500609377}
   - component: {fileID: 427501771733029665}
-  - component: {fileID: 1262901928441295321}
   m_Layer: 0
   m_Name: pfWorldPurse3
   m_TagString: Untagged
@@ -157,28 +156,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1262901928441295321
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5488915905500609390}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 5
-    dress: 5
-    hair: 4
-    shoes: 4
-    purse: 3
-    watch: 4
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 815888192596225839}
 --- !u!1 &6344435796149202664
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,6 +268,7 @@ GameObject:
   - component: {fileID: 8271921052511592014}
   - component: {fileID: 4653311542653118998}
   - component: {fileID: 3843158584530794900}
+  - component: {fileID: 3885168594928612167}
   m_Layer: 0
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -374,6 +352,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.25505254, y: 0.29134765, z: 0.1351181}
   m_Center: {x: 0, y: -0.14226528, z: -0.00037552044}
+--- !u!114 &3885168594928612167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7008991388743205658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 5
+    dress: 5
+    hair: 4
+    shoes: 4
+    purse: 3
+    watch: 4
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 815888192596225839}
 --- !u!1 &7343952270201631337
 GameObject:
   m_ObjectHideFlags: 0

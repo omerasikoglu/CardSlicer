@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2244952982100445234}
   - component: {fileID: 6261672129891704946}
-  - component: {fileID: 4795662506593993354}
   m_Layer: 0
   m_Name: pfWorldDress3
   m_TagString: Untagged
@@ -50,28 +49,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4795662506593993354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2244952982100445245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 2
-    dress: 3
-    hair: 3
-    shoes: 2
-    purse: 3
-    watch: 3
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 6366324907813756028}
 --- !u!1 &2629143184125901612
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,6 +195,7 @@ GameObject:
   - component: {fileID: 2432193826540006685}
   - component: {fileID: 1412095127501379909}
   - component: {fileID: 9034550510203286501}
+  - component: {fileID: 913089374239936477}
   m_Layer: 0
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -232,13 +210,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3625353378405052489}
-  m_LocalRotation: {x: -0.70044, y: -0.22196615, z: 0.5628957, w: 0.37850136}
-  m_LocalPosition: {x: 0.0061451187, y: 0.06532032, z: -0.053332895}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 928448325717970019}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -16.281, y: 265.233, z: -230.162}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &2432193826540006685
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -301,6 +279,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.4335937, y: 0.60509515, z: 0.3459298}
   m_Center: {x: 0.0015553845, y: -0.18401776, z: -0.047103178}
+--- !u!114 &913089374239936477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625353378405052489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 2
+    dress: 3
+    hair: 3
+    shoes: 2
+    purse: 3
+    watch: 3
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 6366324907813756028}
 --- !u!1 &6366324907813756028
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,7 +326,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6366324907813756028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.342, y: 3.58, z: 0.324}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4008579053335268849}
@@ -382,7 +382,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.04}
+  m_AnchoredPosition: {x: 0, y: 0.63}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4982111080740690761
@@ -499,12 +499,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9089598507488657691}
-  m_LocalRotation: {x: -0.55081683, y: 0.39199293, z: -0.68177587, w: -0.27950683}
-  m_LocalPosition: {x: -3.270018, y: 4.019935, z: 0.2161874}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2742872472618160572}
   - {fileID: 7534540542685656545}
   m_Father: {fileID: 2244952982100445234}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 57.396, y: 80.828, z: -174.6}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 6638584144937848095}
   - component: {fileID: 7960353633086257479}
   - component: {fileID: 36369298211640295}
+  - component: {fileID: 6672916356715492862}
   m_Layer: 0
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -202,6 +203,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.37289292, y: 0.63818866, z: 0.42788887}
   m_Center: {x: -0.000000096871595, y: -0.0035617652, z: 0.0026975356}
+--- !u!114 &6672916356715492862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5742029936056029259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 3
+    dress: 5
+    hair: 2
+    shoes: 4
+    purse: 4
+    watch: 4
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 2718384962618981502}
 --- !u!1 &6381607921526903037
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,7 +369,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7117854182497986608}
   - component: {fileID: 3100152049824137328}
-  - component: {fileID: 4570454166449611400}
   m_Layer: 0
   m_Name: pfWorldHair2
   m_TagString: Untagged
@@ -386,28 +408,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4570454166449611400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7117854182497986623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 3
-    dress: 5
-    hair: 2
-    shoes: 4
-    purse: 4
-    watch: 4
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 2718384962618981502}
 --- !u!1 &7839035079951488465
 GameObject:
   m_ObjectHideFlags: 0

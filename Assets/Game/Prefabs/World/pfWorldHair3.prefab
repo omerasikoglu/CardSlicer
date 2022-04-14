@@ -251,7 +251,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5069959721791113328}
   - component: {fileID: 1125439171796688944}
-  - component: {fileID: 2014847304163984072}
   m_Layer: 0
   m_Name: pfWorldHair3
   m_TagString: Untagged
@@ -291,28 +290,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2014847304163984072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5069959721791113343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 3
-    dress: 0
-    hair: 3
-    shoes: 2
-    purse: 3
-    watch: 3
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 81640470972537918}
 --- !u!1 &7724912399017357323
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,6 +302,7 @@ GameObject:
   - component: {fileID: 8699637473568386399}
   - component: {fileID: 5396284734029388039}
   - component: {fileID: 2601561630522569639}
+  - component: {fileID: 8586486187720055518}
   m_Layer: 0
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -408,6 +386,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3670509, y: 0.55345535, z: 0.33104613}
   m_Center: {x: 0.0000429824, y: 0.0000011473891, z: 0.00000017136274}
+--- !u!114 &8586486187720055518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7724912399017357323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 3
+    dress: 0
+    hair: 3
+    shoes: 2
+    purse: 3
+    watch: 3
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 81640470972537918}
 --- !u!1 &8427734401046409319
 GameObject:
   m_ObjectHideFlags: 0

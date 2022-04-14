@@ -351,7 +351,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5742211718408460386}
   - component: {fileID: 464484658297958434}
-  - component: {fileID: 1304458746334712538}
   m_Layer: 0
   m_Name: pfWorldWatch2
   m_TagString: Untagged
@@ -391,28 +390,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1304458746334712538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5742211718408460397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 6
-    dress: 5
-    hair: 4
-    shoes: 4
-    purse: 4
-    watch: 2
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 634577845941341228}
 --- !u!1 &7122465098316587033
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,6 +402,7 @@ GameObject:
   - component: {fileID: 8167032267954191693}
   - component: {fileID: 4832088607824595221}
   - component: {fileID: 7469327134149307546}
+  - component: {fileID: 733837161248034664}
   m_Layer: 0
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -508,3 +486,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.25248536, y: 0.3575114, z: 0.495659}
   m_Center: {x: -0.009215694, y: -0.10277028, z: -0.05617588}
+--- !u!114 &733837161248034664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7122465098316587033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 6
+    dress: 5
+    hair: 4
+    shoes: 4
+    purse: 4
+    watch: 2
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 634577845941341228}

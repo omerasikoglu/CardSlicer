@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 944534347346801271}
   - component: {fileID: 4558644011918018095}
   - component: {fileID: 5889125327207132303}
+  - component: {fileID: 6660288525986870132}
   m_Layer: 6
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -126,13 +127,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2203557824125611811}
-  m_LocalRotation: {x: -0.70044, y: -0.22196615, z: 0.5628957, w: 0.37850136}
-  m_LocalPosition: {x: 0.0061451187, y: 0.06532032, z: -0.053332895}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 2322108425412776713}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -16.281, y: 265.233, z: -230.162}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &944534347346801271
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -195,6 +196,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5691043, y: 1.0990243, z: 0.49666503}
   m_Center: {x: -0.009041468, y: 0.028024353, z: -0.055408504}
+--- !u!114 &6660288525986870132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2203557824125611811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 2
+    dress: 1
+    hair: 4
+    shoes: 4
+    purse: 4
+    watch: 4
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 8395538049637253910}
 --- !u!1 &3746123311715669847
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,7 +228,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3746123311715669848}
   - component: {fileID: 8808660690534072088}
-  - component: {fileID: 7950777754954472928}
   m_Layer: 0
   m_Name: pfWorldDress1
   m_TagString: Untagged
@@ -245,28 +267,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7950777754954472928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3746123311715669847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 2
-    dress: 1
-    hair: 4
-    shoes: 4
-    purse: 4
-    watch: 4
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 8395538049637253910}
 --- !u!1 &5115774320185031889
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,15 +320,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5980769538098732657}
-  m_LocalRotation: {x: -0.55081683, y: 0.39199293, z: -0.68177587, w: -0.27950683}
-  m_LocalPosition: {x: -3.270018, y: 4.019935, z: 0.2161874}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 777970865412771542}
   - {fileID: 4921127271573285515}
   m_Father: {fileID: 3746123311715669848}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 57.396, y: 80.828, z: -174.6}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7831992009063023342
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +488,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8395538049637253910}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.342, y: 3.58, z: 0.324}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2408644609795434082}

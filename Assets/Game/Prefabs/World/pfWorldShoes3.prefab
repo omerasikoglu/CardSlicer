@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 592094568939451890}
   - component: {fileID: 4210774052404838826}
   - component: {fileID: 6095132176800541450}
+  - component: {fileID: 5544665745845963507}
   m_Layer: 0
   m_Name: visual-Alive
   m_TagString: Untagged
@@ -95,6 +96,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3510518, y: 0.20818356, z: 0.43658978}
   m_Center: {x: -0.00055731833, y: -0.06274836, z: 0.21825927}
+--- !u!114 &5544665745845963507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997555381036525734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDetails:
+    type: 4
+    dress: 5
+    hair: 4
+    shoes: 2
+    purse: 4
+    watch: 4
+  isFallingDown: 0
+  hasExit: 1
+  exit: {fileID: 8191717303746266259}
 --- !u!1 &3454350307670531915
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,7 +262,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3949873950570270941}
   - component: {fileID: 9156526238845302941}
-  - component: {fileID: 7744770917308537445}
   m_Layer: 0
   m_Name: pfWorldShoes3
   m_TagString: Untagged
@@ -279,28 +301,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7744770917308537445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3949873950570270930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694b36e8a3d36d4993c05c9537d8e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDetails:
-    type: 4
-    dress: 5
-    hair: 4
-    shoes: 2
-    purse: 4
-    watch: 4
-  isFallingDown: 0
-  hasExit: 1
-  exit: {fileID: 8191717303746266259}
 --- !u!1 &4887183501740325716
 GameObject:
   m_ObjectHideFlags: 0
