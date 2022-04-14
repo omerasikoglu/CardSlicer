@@ -5,8 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using NaughtyAttributes;
 using DG.Tweening;
 
-public class PlayerController : Model
-{
+public class PlayerController : Model {
     [SerializeField, Foldout("[Options]")] private float rotationSpeed = 3f, rotationLimitZ = .65f, eulerAngleLimitZ = 75f;
     [SerializeField, Foldout("[Options]")] private int unhappinessThreshold = 2;
     [SerializeField, Foldout("[Input]")] private InputManager inputManager;
@@ -24,26 +23,22 @@ public class PlayerController : Model
     private Vector3 goCoord, worldOffsetPos;
     private Vector3 eulerLeft, eulerRight;
 
-    private void Awake()
-    {
+    private void Awake() {
         InputObserver();
         SetEulerLimits();
 
         cardCollider = transform.GetComponentInChildren<BoxCollider>();
     }
-    protected override void Update()
-    {
+    protected override void Update() {
         base.Update();
         CheckRotationLimits();
     }
 
-    private void FixedUpdate()
-    {
-        //Lighto();
+    private void FixedUpdate() {
+        Lighto();
     }
 
-    private void Lighto()
-    {
+    private void Lighto() {
         Bounds bounds = cardCollider.bounds;
         float rayLength = 5f;
 
@@ -63,8 +58,7 @@ public class PlayerController : Model
 
     }
 
-    private void DrawSquareRay(Bounds bounds, Vector3 dir, float rayLength, Color rayColor)
-    {
+    private void DrawSquareRay(Bounds bounds, Vector3 dir, float rayLength, Color rayColor) {
         Debug.DrawRay( //top right
             start: bounds.max,
             dir: dir * rayLength,
@@ -86,9 +80,8 @@ public class PlayerController : Model
             color: rayColor
         );
     }
-    private void OnTriggerEnter(Collider collision)
-    {
-        Collectible collectible = collision.GetComponentInParent<Collectible>();
+    private void OnTriggerEnter(Collider collision) {
+        Collectible collectible = collision.GetComponent<Collectible>();
 
         if (collectible != null)
         {
@@ -96,22 +89,19 @@ public class PlayerController : Model
             AffordMoney(collectible);
         }
 
-        //Exit exit = collision.GetComponentInParent<Exit>();
-
-        if (collision.CompareTag("Exit"))
+        if (collision.CompareTag(StringData.EXIT))
         {
             Debug.Log("exit");
             IncreaseUnhappiness();
         }
     }
-    private void AffordMoney(Collectible collectible)
-    {
+    private void AffordMoney(Collectible collectible) {
         int moneyAmount = collectible.GetItemDetails().money;
         int currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY, 0);
 
         if (currentMoney + moneyAmount < 0)
         {
-            Debug.Log("yeterli paran yok");
+            Debug.Log("not enough money");
             womanController.PlayBadFX();
             return;
         }
@@ -125,8 +115,7 @@ public class PlayerController : Model
         womanController.PlayGoodFX();
         collectible.PlayCollectibleTasks();
     }
-    private void IncreaseUnhappiness()
-    {
+    private void IncreaseUnhappiness() {
         UnhappinessBar.Instance.IncreaseUnhappiness();
 
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) < unhappinessThreshold)
@@ -140,43 +129,37 @@ public class PlayerController : Model
     }
 
     #region Rotation
-    private void SetEulerLimits()
-    {
+    private void SetEulerLimits() {
         var localEulerAngles = playerRoot.localEulerAngles;
 
         eulerLeft = new Vector3(localEulerAngles.x, localEulerAngles.y, eulerAngleLimitZ);
         eulerRight = new Vector3(localEulerAngles.x, localEulerAngles.y, -eulerAngleLimitZ);
     }
-    private void CheckRotationLimits()
-    {
+    private void CheckRotationLimits() {
         if (playerRoot.rotation.z > rotationLimitZ) playerRoot.localEulerAngles = eulerLeft;
         if (playerRoot.rotation.z < -rotationLimitZ) playerRoot.localEulerAngles = eulerRight;
     }
     #endregion
 
     #region Input
-    private void InputObserver()
-    {
+    private void InputObserver() {
         inputManager.OnSlidePerformed += OnSlideRotatePerformed;
         inputManager.OnSlidePerformed += OnSlideMovementPerformed;
         inputManager.OnTouchPerformed += OnTouchPerformed;
         inputManager.OnTouchEnded += OnTouchEnded;
     }
 
-    private void OnTouchPerformed(Vector2 coord)
-    {
+    private void OnTouchPerformed(Vector2 coord) {
         Ray ray = UtilsClass.GetScreenPointToRay(coord);
         Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
 
         //if (!Physics.Raycast(ray, out RaycastHit hit, 150f)) return; if (hit.collider.CompareTag("Player"))  
         isTouchingScreen = true;
     }
-    private void OnTouchEnded()
-    {
+    private void OnTouchEnded() {
         isTouchingScreen = false;
     }
-    private void OnSlideMovementPerformed(Vector2 slideOffset)
-    {
+    private void OnSlideMovementPerformed(Vector2 slideOffset) {
         if (!isTouchingScreen) return;
         if (!isSlideMovementYActive && !isSlideMovementXActive) return;
 
@@ -188,8 +171,7 @@ public class PlayerController : Model
         if (isSlideMovementYActive) SlideMovementY();
         if (isSlideMovementXActive) SlideMovementX();
     }
-    private void OnSlideRotatePerformed(Vector2 slideOffset)
-    {
+    private void OnSlideRotatePerformed(Vector2 slideOffset) {
         if (!isTouchingScreen) return;
 
         float rotatePosZ = -slideOffset.x * rotationSpeed * Time.deltaTime;
@@ -197,8 +179,7 @@ public class PlayerController : Model
         if (isSlideRotateZActive) SlideRotateZ(rotatePosZ);
     }
 
-    private void SlideRotateZ(float delta)
-    {
+    private void SlideRotateZ(float delta) {
         if (playerRoot.rotation.z > rotationLimitZ && delta > 0f) return;
         if (playerRoot.rotation.z < -rotationLimitZ && delta < 0f) return;
 
@@ -207,12 +188,10 @@ public class PlayerController : Model
 
         playerRoot.Rotate(0, 0, delta);
     }
-    private void SlideMovementY()
-    {
+    private void SlideMovementY() {
         playerRoot.position = new Vector3(transform.position.x, worldOffsetPos.y, transform.position.z);
     }
-    private void SlideMovementX()
-    {
+    private void SlideMovementX() {
         playerRoot.position = new Vector3(worldOffsetPos.x, transform.position.y, transform.position.z);
     }
     #endregion

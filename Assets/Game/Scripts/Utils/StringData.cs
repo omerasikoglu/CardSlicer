@@ -7,7 +7,7 @@ public struct StringData
     //Scene
     public const string MAIN_SCENE = "MainScene";
 
-    //Tag
+    //Collision
     public const string EXIT = "Exit";
     public const string PLAYER = "Player";
 

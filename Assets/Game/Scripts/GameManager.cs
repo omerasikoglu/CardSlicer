@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     private static void InitPlayerPrefs()
     {
-        PlayerPrefs.SetInt(StringData.PREF_MONEY, 0);
+        PlayerPrefs.SetInt(StringData.PREF_MONEY, 900);
         PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
     }
 }
