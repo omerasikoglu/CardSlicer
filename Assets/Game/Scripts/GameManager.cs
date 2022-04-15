@@ -54,6 +54,7 @@ public class GameManager : Singleton<GameManager> {
         Time.timeScale = 1f;
     }
     private void WinGame() {
+        UIManager.Instance.ShowUI(GameUI.Win);
         //character stop woman fail anim activate
     }
     private void LoseGame() {

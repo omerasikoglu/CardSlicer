@@ -109,20 +109,28 @@ public class PlayerController : Model {
         );
     }
     private void OnTriggerEnter(Collider collision) {
-        Collectible collectible = collision.GetComponent<Collectible>();
 
+        Collectible collectible = collision.GetComponent<Collectible>();
         if (collectible != null)
         {
             Debug.Log("collected");
             AffordMoney(collectible);
         }
 
+        EndGameArea endGameArea = collision.GetComponentInParent<EndGameArea>();
+        if (endGameArea != null)
+        {
+            Debug.Log("endgame");
+            GameManager.Instance.ChangeState(GameState.WinGame);
+        }
+
         if (collision.CompareTag(StringData.EXIT))
         {
-            Debug.Log("exit");
+            Debug.Log("item exit");
             IncreaseUnhappiness();
             //Destroy(collision.GetComponentInParent<Rigidbody>().gameObject);
         }
+
     }
     private void AffordMoney(Collectible collectible) {
         int moneyAmount = collectible.GetItemDetails().money;
@@ -181,6 +189,7 @@ public class PlayerController : Model {
         womanController.transform.position = womanFirstPos;
 
         PlayerPrefs.SetInt(StringData.PREF_MONEY, 0);
+        PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
         CheckCardMaterial();
 
         SceneManager.UnloadSceneAsync(1);

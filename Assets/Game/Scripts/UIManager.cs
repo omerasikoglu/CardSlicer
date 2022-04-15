@@ -10,6 +10,7 @@ public enum GameUI {
     InGame = 2,
     Win = 3,
     Lose = 4,
+    NextLevel = 5,
 }
 public class UIManager : Singleton<UIManager> {
 
@@ -20,7 +21,7 @@ public class UIManager : Singleton<UIManager> {
 
     protected void Awake() {
         GameManager.OnStateChanged += GameManager_OnStateChanged;
-        
+
         Init();
         DisableAllUIs();
     }
@@ -73,7 +74,7 @@ public class UIManager : Singleton<UIManager> {
     [Button]
     public void SetActiveInGameUI() {
         ShowUI(GameUI.InGame);
-        
+
     }
     [Button]
     public void SetActiveYouLoseUI() {

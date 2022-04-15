@@ -38,7 +38,7 @@ public class WomanController : Model {
                 SetMovementSpeed(0);
                 break;
             case GameState.LoseGame:
-                PlayLoseFX();
+                //PlayLoseFX();
                 SetMovementSpeed(0);
                 break;
             default: break;
@@ -160,7 +160,7 @@ public class WomanController : Model {
         transform.DOMoveY(0f, .6f);
         transform.DORotate(Vector3.zero, rotateTime);
         yield return new WaitForSeconds(rotateTime);
-        WomanAnimationController.Instance.PlayCatWalk();
+        CheckCatWalk();
     }
     public IEnumerator PlayTearsWhileWalking() {
         float rotateTime = .4f;
@@ -171,40 +171,56 @@ public class WomanController : Model {
         transform.DOMoveY(0f, .6f);
         transform.DORotate(Vector3.zero, rotateTime);
         yield return new WaitForSeconds(rotateTime);
-        WomanAnimationController.Instance.PlayCatWalk();
+
+        CheckCatWalk();
+
+
+
     }
 
-    [Button]
-    private async Task HappyWhileWalkingTasksStart() {
-        //await PlayAnimationTask(() =>
-        //{
-        //    WomanAnimationController.Instance.PlayHappy();
-        //});
-    }
-    [Button]
-    public async Task CryWhileWalkingTasksStart() {
-        await PlayAnimationTask(() =>
+    private static void CheckCatWalk()
+    {
+        if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) >= 2)
         {
             WomanAnimationController.Instance.PlayCry();
-        });
-    }
-    private async Task PlayAnimationTask(Action action) {
-        float rotateTime = .4f;
-
-        List<Task> taskList = new List<Task>
+        }
+        else
         {
-            transform.DORotate(new Vector3(0,-180,0), rotateTime).AsyncWaitForCompletion()
-        };
-        await Task.WhenAll(taskList);
-        action();
-        taskList.Add(transform.DOMoveY(0f, .6f).AsyncWaitForCompletion());
-        await Task.WhenAll(taskList);
-        taskList.Add(transform.DORotate(Vector3.zero, rotateTime).AsyncWaitForCompletion());
-        await Task.WhenAll(taskList);
-        WomanAnimationController.Instance.PlayCatWalk();
-
-
+            WomanAnimationController.Instance.PlayCatWalk();
+        }
     }
+
+    //[Button]
+    //private async Task HappyWhileWalkingTasksStart() {
+    //    await PlayAnimationTask(() =>
+    //    {
+    //        WomanAnimationController.Instance.PlayHappy();
+    //    });
+    //}
+    //[Button]
+    //public async Task CryWhileWalkingTasksStart() {
+    //    await PlayAnimationTask(() =>
+    //    {
+    //        WomanAnimationController.Instance.PlayCry();
+    //    });
+    //}
+    //private async Task PlayAnimationTask(Action action) {
+    //    float rotateTime = .4f;
+
+    //    List<Task> taskList = new List<Task>
+    //    {
+    //        transform.DORotate(new Vector3(0,-180,0), rotateTime).AsyncWaitForCompletion()
+    //    };
+    //    await Task.WhenAll(taskList);
+    //    action();
+    //    taskList.Add(transform.DOMoveY(0f, .6f).AsyncWaitForCompletion());
+    //    await Task.WhenAll(taskList);
+    //    taskList.Add(transform.DORotate(Vector3.zero, rotateTime).AsyncWaitForCompletion());
+    //    await Task.WhenAll(taskList);
+    //    WomanAnimationController.Instance.PlayCatWalk();
+
+
+    //}
 
     #region FX
     public void PlayGoodFX() => PlayFX(particleList[0]);
