@@ -6,57 +6,79 @@ using NaughtyAttributes;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : Model {
     [SerializeField, Foldout("[Options]")] private float rotationSpeed = 3f, rotationLimitZ = .65f, eulerAngleLimitZ = 75f;
     [SerializeField, Foldout("[Options]")] private int unhappinessThreshold = 2;
     [SerializeField, Foldout("[Input]")] private InputManager inputManager;
     [SerializeField, Foldout("[Input]")] private bool isSlideMovementYActive, isSlideMovementXActive, isSlideRotateZActive;
+    [SerializeField, Foldout("[Ray]")] private LayerMask targetLayerMask;
+    [SerializeField, Foldout("[Ray]")] private Material emissionMaterial;
 
     [SerializeField] private Transform playerRoot;
     [SerializeField] private WomanController womanController;
 
-    private BoxCollider cardCollider;
-    [SerializeField, SortingLayer] private LayerMask targetLayerMask;
     [SerializeField] private TextMeshProUGUI textMesh;
-    [SerializeField] private Material emissionMaterial;
 
-    //[SerializeField] private Animator animator;
-    private bool isTouchingScreen, canMove = true;
+    private Vector3 womanFirstPos;
+    private Vector3 handFirstPos;
+
+    private BoxCollider cardCollider;
+    private bool isTouchingScreen;
 
     private Vector3 goCoord, worldOffsetPos;
     private Vector3 eulerLeft, eulerRight;
 
     private void Awake() {
+        GameManager.OnStateChanged += GameManager_OnStateChanged;
         InputObserver();
         SetEulerLimits();
 
         cardCollider = transform.GetComponentInChildren<BoxCollider>();
+
+        handFirstPos = transform.position;
+        womanFirstPos = womanController.transform.position;
     }
+
+    private void GameManager_OnStateChanged(GameState obj) {
+        switch (obj)
+        {
+            case GameState.TapToPlay: SetMovementSpeed(0); break;
+            case GameState.Run: SetMovementSpeed(2); break;
+            case GameState.WinGame: SetMovementSpeed(0); break;
+            case GameState.LoseGame: SetMovementSpeed(0); break;
+            default: break;
+        }
+    }
+
     protected override void Update() {
         base.Update();
         CheckRotationLimits();
     }
 
     private void FixedUpdate() {
-        Lighto();
+        //Lighto();
     }
 
     private void Lighto() {
         Bounds bounds = cardCollider.bounds;
         float rayLength = 2f;
+        RaycastHit hitInfo;
 
         bool isHitCollectible = Physics.BoxCast(
             center: new Vector3(bounds.center.x, bounds.center.y, bounds.max.z),
-            halfExtents: bounds.extents,
+            halfExtents: new Vector3(bounds.extents.x, bounds.extents.y),
             direction: Vector3.forward,
+            hitInfo: out hitInfo,
             orientation: Quaternion.identity,
             maxDistance: rayLength,
             layerMask: targetLayerMask
             );
 
         Color rayColor = isHitCollectible ? Color.green : Color.red;
-        emissionMaterial.SetColor("_EmissionColor", rayColor);
+        //Color rayColor = raycastHits.Length != 0 ? Color.green : Color.red;
+        //emissionMaterial.SetColor("_EmissionColor", rayColor);
         DrawRectangleRay(cardCollider.bounds, Vector3.forward, rayLength, rayColor);
 
     }
@@ -96,6 +118,7 @@ public class PlayerController : Model {
         {
             Debug.Log("exit");
             IncreaseUnhappiness();
+            //Destroy(collision.GetComponentInParent<Rigidbody>().gameObject);
         }
     }
     private void AffordMoney(Collectible collectible) {
@@ -109,7 +132,7 @@ public class PlayerController : Model {
             return;
         }
 
-        if (moneyAmount >= 0 && PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) > 0) UnhappinessBar.Instance.ResetBar();
+        //if (moneyAmount >= 0 && PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) > 0) UnhappinessBar.Instance.ResetBar();
 
         currentMoney += moneyAmount;
         PlayerPrefs.SetInt(StringData.PREF_MONEY, currentMoney);
@@ -120,16 +143,31 @@ public class PlayerController : Model {
         collectible.PlayCollectibleTasks();
     }
     private void IncreaseUnhappiness() {
-        UnhappinessBar.Instance.IncreaseUnhappiness();
+
+        if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1 > unhappinessThreshold) return;
+
+        PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS,
+            PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1);
 
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) < unhappinessThreshold)
         {
-            womanController.PlayBadFX();
+            //womanController.CryWhileWalking();
         }
         else
         {
-            womanController.PlayLoseFX();
+            GameManager.Instance.ChangeState(GameState.LoseGame);
         }
+    }
+
+    public void Reload() //activate from buttonUI
+    {
+        transform.position = handFirstPos;
+        womanController.transform.position = womanFirstPos;
+
+        SceneManager.UnloadSceneAsync(1);
+        SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+        GameManager.Instance.ChangeState(GameState.Run);
+
     }
 
     #region Rotation

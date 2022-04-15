@@ -149,4 +149,7 @@ public static class UtilsClass
         action();
     }
 
+    internal static string Wait(Action p) {
+        throw new NotImplementedException();
+    }
 }

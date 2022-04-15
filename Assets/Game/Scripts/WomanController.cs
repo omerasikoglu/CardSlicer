@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 public class WomanController : Model {
 
@@ -24,24 +24,40 @@ public class WomanController : Model {
     [SerializeField] private List<ParticleSystem> particleList; //0=>good, 1=>bad, 2=>lose, 3=>hanabi
 
     private void Awake() {
+        GameManager.OnStateChanged += GameManager_OnStateChanged;
         InitItems();
-        AnimationController.Instance.AnimateCatWalk();
+    }
+
+    private void GameManager_OnStateChanged(GameState obj) {
+        switch (obj)
+        {
+            case GameState.TapToPlay: SetMovementSpeed(0); break;
+            case GameState.Run: SetMovementSpeed(2); break;
+            case GameState.WinGame:
+                PlayGoodFX();
+                SetMovementSpeed(0);
+                break;
+            case GameState.LoseGame:
+                PlayLoseFX();
+                SetMovementSpeed(0);
+                break;
+            default: break;
+        }
     }
 
     private void OnTriggerEnter(Collider collision) {
         Collectible collectible = collision.GetComponentInParent<Collectible>();
 
         if (collectible == null) return;
+        if (!collectible.IsPlayerTouchIt) return;
 
         SetActiveWomanPart(collectible.GetItemDetails());
-        //IncreaseHeight();
-        //TODO: happy woman animation // AnimationController.Instance.AnimateHappy();
-        //StartCoroutine(UtilsClass.Wait(() => { AnimationController.Instance.AnimateCatWalk(); }, 1f)); 
-        Destroy(collision.gameObject);
-    }
 
-    private void IncreaseHeight() {
-        transform.DOScaleY(transform.localScale.y + 0.5f, 1f).SetEase(Ease.InBounce);
+        //HappyWhileWalking();
+        StartCoroutine(asd());
+
+        collision.gameObject.SetActive(false);
+        StartCoroutine(UtilsClass.Wait(() => { Destroy(collision.gameObject); }, 1f));
     }
 
     private void InitItems() {
@@ -77,6 +93,7 @@ public class WomanController : Model {
         }
         dressList[0].gameObject.SetActive(true);
         hairList[0].gameObject.SetActive(true);
+        shoesList[0].gameObject.SetActive(true);
     }
 
     public void SetActiveWomanPart(ItemDetails itemDetails) {
@@ -131,6 +148,50 @@ public class WomanController : Model {
         {
             st.gameObject.SetActive(false);
         }
+
+    }
+
+    IEnumerator asd() {
+        float rotateTime = .4f;
+
+        AnimationController.Instance.PlayHappy();
+        transform.DORotate(new Vector3(0, -180, 0), rotateTime);
+        yield return new WaitForSeconds(rotateTime);
+        transform.DOMoveY(0f, .6f);
+        transform.DORotate(Vector3.zero, rotateTime);
+        yield return new WaitForSeconds(rotateTime);
+        AnimationController.Instance.PlayCatWalk();
+    }
+
+    [Button]
+    private async Task HappyWhileWalking() {
+        //await PlayAnimationTask(() =>
+        //{
+        //    AnimationController.Instance.PlayHappy();
+        //});
+    }
+    [Button]
+    public async Task CryWhileWalking() {
+        await PlayAnimationTask(() =>
+        {
+            AnimationController.Instance.PlayCry();
+        });
+    }
+    private async Task PlayAnimationTask(Action action) {
+        float rotateTime = .4f;
+
+        List<Task> taskList = new List<Task>
+        {
+            transform.DORotate(new Vector3(0,-180,0), rotateTime).AsyncWaitForCompletion()
+        };
+        await Task.WhenAll(taskList);
+        action();
+        taskList.Add(transform.DOMoveY(0f, .6f).AsyncWaitForCompletion());
+        await Task.WhenAll(taskList);
+        taskList.Add(transform.DORotate(Vector3.zero, rotateTime).AsyncWaitForCompletion());
+        await Task.WhenAll(taskList);
+        AnimationController.Instance.PlayCatWalk();
+
 
     }
 

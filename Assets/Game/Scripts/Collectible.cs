@@ -21,7 +21,7 @@ public enum CollectibleType {
 [Serializable] public enum HairVariant { Hair1 = 1, Hair2 = 2, Hair3 = 3, None = 4 }
 [Serializable] public enum ShoesVariant { Shoes1 = 1, Shoes2 = 2, Shoes3 = 3, None = 4 }
 [Serializable] public enum PurseVariant { Purse1 = 1, Purse2 = 2, Purse3 = 3, None = 4 }
-[Serializable] public enum WatchVariant { Watch1 = 1, Watch2 = 2, Watch3 = 3, None=4 }
+[Serializable] public enum WatchVariant { Watch1 = 1, Watch2 = 2, Watch3 = 3, None = 4 }
 [Serializable]
 public struct ItemDetails {
     public CollectibleType type;
@@ -61,14 +61,19 @@ public class Collectible : MonoBehaviour {
     [SerializeField, BoxGroup("[Collider]"), EnableIf("hasExit")] private GameObject exit;
 
     public ItemDetails GetItemDetails() => itemDetails;
+    public bool IsPlayerTouchIt => exit == null;
     private Transform womanTransform, alive, broken;
 
     private void Awake() {
         Init();
         if (!hasExit) Destroy(exit);
+        VerticalVolplane();
+    }
+
+    private void VerticalVolplane() { //süzülme
         float i = UnityEngine.Random.Range(1f, 2f);
-        transform.GetComponentInParent<Rigidbody>().transform.
-            DOMoveY(transform.position.y + .2f, i).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        transform.GetComponentInParent<Rigidbody>().transform.DOMoveY(transform.position.y + .2f, i)
+            .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
     private void Init() {
@@ -90,18 +95,18 @@ public class Collectible : MonoBehaviour {
 
         var position = transform.position;
         Vector3 womanPosDelta = new Vector3(0f, 2f, 2.5f); //womanTransform's pos after 1 sec delay
-        
-        float height = UnityEngine.Random.Range(2f, 3f), ascendTime = UnityEngine.Random.Range(.6f, .8f);
+
+        float height = UnityEngine.Random.Range(1.5f, 2f), ascendTime = UnityEngine.Random.Range(.3f, .4f);
         List<Task> taskList = new List<Task>
         {
             transform.DOMoveZ(position.z + 5f, ascendTime).AsyncWaitForCompletion(),
             transform.DOMoveY(position.y + height, ascendTime).AsyncWaitForCompletion()
         };
         await Task.WhenAll(taskList);
-        taskList.Add(transform.DOScale(transform.localScale * 2f, .3f).AsyncWaitForCompletion());
-        taskList.Add(transform.DORotate(new Vector3(0f, 90f, 0f), 1f).AsyncWaitForCompletion());
+        taskList.Add(transform.DOScale(transform.localScale * 2f, ascendTime).AsyncWaitForCompletion());
+        taskList.Add(transform.DORotate(new Vector3(0f, 90f, 0f), ascendTime).AsyncWaitForCompletion());
         await Task.WhenAll(taskList);
-        taskList.Add(transform.DOMove(womanTransform.position + womanPosDelta, 1f).AsyncWaitForCompletion());
+        if (transform != null) taskList.Add(transform.DOMove(womanTransform.position + womanPosDelta, 1f).AsyncWaitForCompletion());
     }
 
 }
