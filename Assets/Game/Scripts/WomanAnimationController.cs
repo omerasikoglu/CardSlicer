@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-public class AnimationController : Singleton<AnimationController>
+public class WomanAnimationController : Singleton<WomanAnimationController>
 {
     [SerializeField] private Animator womanAnimator;
 

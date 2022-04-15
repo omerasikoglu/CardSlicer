@@ -53,8 +53,8 @@ public class WomanController : Model {
 
         SetActiveWomanPart(collectible.GetItemDetails());
 
-        //HappyWhileWalking();
-        StartCoroutine(asd());
+        //HappyWhileWalkingTasksStart();
+        StartCoroutine(PlayHappyWhileWalking());
 
         collision.gameObject.SetActive(false);
         StartCoroutine(UtilsClass.Wait(() => { Destroy(collision.gameObject); }, 1f));
@@ -151,30 +151,41 @@ public class WomanController : Model {
 
     }
 
-    IEnumerator asd() {
+    private IEnumerator PlayHappyWhileWalking() {
         float rotateTime = .4f;
 
-        AnimationController.Instance.PlayHappy();
+        WomanAnimationController.Instance.PlayHappy();
         transform.DORotate(new Vector3(0, -180, 0), rotateTime);
         yield return new WaitForSeconds(rotateTime);
         transform.DOMoveY(0f, .6f);
         transform.DORotate(Vector3.zero, rotateTime);
         yield return new WaitForSeconds(rotateTime);
-        AnimationController.Instance.PlayCatWalk();
+        WomanAnimationController.Instance.PlayCatWalk();
+    }
+    public IEnumerator PlayTearsWhileWalking() {
+        float rotateTime = .4f;
+
+        WomanAnimationController.Instance.PlayCry();
+        transform.DORotate(new Vector3(0, -180, 0), rotateTime);
+        yield return new WaitForSeconds(rotateTime);
+        transform.DOMoveY(0f, .6f);
+        transform.DORotate(Vector3.zero, rotateTime);
+        yield return new WaitForSeconds(rotateTime);
+        WomanAnimationController.Instance.PlayCatWalk();
     }
 
     [Button]
-    private async Task HappyWhileWalking() {
+    private async Task HappyWhileWalkingTasksStart() {
         //await PlayAnimationTask(() =>
         //{
-        //    AnimationController.Instance.PlayHappy();
+        //    WomanAnimationController.Instance.PlayHappy();
         //});
     }
     [Button]
-    public async Task CryWhileWalking() {
+    public async Task CryWhileWalkingTasksStart() {
         await PlayAnimationTask(() =>
         {
-            AnimationController.Instance.PlayCry();
+            WomanAnimationController.Instance.PlayCry();
         });
     }
     private async Task PlayAnimationTask(Action action) {
@@ -190,7 +201,7 @@ public class WomanController : Model {
         await Task.WhenAll(taskList);
         taskList.Add(transform.DORotate(Vector3.zero, rotateTime).AsyncWaitForCompletion());
         await Task.WhenAll(taskList);
-        AnimationController.Instance.PlayCatWalk();
+        WomanAnimationController.Instance.PlayCatWalk();
 
 
     }

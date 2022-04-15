@@ -21,6 +21,9 @@ public class PlayerController : Model {
 
     [SerializeField] private TextMeshProUGUI textMesh;
 
+    [SerializeField, Foldout("[Card]")] private List<Material> materialList;
+    [SerializeField, Foldout("[Card]")] private MeshRenderer cardMeshRenderer;
+
     private Vector3 womanFirstPos;
     private Vector3 handFirstPos;
 
@@ -128,7 +131,7 @@ public class PlayerController : Model {
         if (currentMoney + moneyAmount < 0)
         {
             Debug.Log("not enough money");
-            womanController.PlayBadFX();
+            //womanController.PlayBadFX();
             return;
         }
 
@@ -139,9 +142,23 @@ public class PlayerController : Model {
         PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
         textMesh.SetText($"{PlayerPrefs.GetInt(StringData.PREF_MONEY)}$");
 
+        CheckCardMaterial();
+
         womanController.PlayGoodFX();
         collectible.PlayCollectibleTasks();
     }
+
+    private void CheckCardMaterial() {
+        int currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY);
+        cardMeshRenderer.material = (currentMoney / 300) switch
+        {
+            0 => materialList[0],
+            1 => materialList[1],
+            2 => materialList[2],
+            _ => materialList[2],
+        };
+    }
+
     private void IncreaseUnhappiness() {
 
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1 > unhappinessThreshold) return;
@@ -151,7 +168,7 @@ public class PlayerController : Model {
 
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) < unhappinessThreshold)
         {
-            //womanController.CryWhileWalking();
+            StartCoroutine(womanController.PlayTearsWhileWalking());
         }
         else
         {
@@ -159,10 +176,12 @@ public class PlayerController : Model {
         }
     }
 
-    public void Reload() //activate from buttonUI
-    {
+    public void Reload() { //activate from UI UnityEvent
         transform.position = handFirstPos;
         womanController.transform.position = womanFirstPos;
+
+        PlayerPrefs.SetInt(StringData.PREF_MONEY, 0);
+        CheckCardMaterial();
 
         SceneManager.UnloadSceneAsync(1);
         SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
