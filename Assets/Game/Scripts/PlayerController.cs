@@ -115,24 +115,23 @@ public class PlayerController : Model {
 
         Collectible collectible = collision.GetComponent<Collectible>();
         if (collectible != null) {
-            Debug.Log("collected");
+            //Debug.Log("collected");
             AffordMoney(collectible);
         }
 
-        EndGameArea endGameArea = collision.GetComponentInParent<EndGameArea>();
-        if (endGameArea != null) {
-            Debug.Log("endgame");
+        if (collision.CompareTag("EndGame")) {
+            //Debug.Log("endgame");
             GameManager.Instance.ChangeState(GameState.Win);
         }
 
         if (collision.CompareTag(StringData.EXIT)) {
-            Debug.Log("item exit");
+            //Debug.Log("item exit");
             IncreaseUnhappiness();
             //Destroy(collision.GetComponentInParent<Rigidbody>().gameObject);
         }
 
     }
-    private void AffordMoney(Collectible collectible) {
+    public void AffordMoney(Collectible collectible) {
         int moneyAmount = collectible.GetItemDetails().money;
         int currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY, 0);
 

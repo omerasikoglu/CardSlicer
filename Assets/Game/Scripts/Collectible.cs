@@ -63,7 +63,7 @@ public class Collectible : MonoBehaviour {
 
     public ItemDetails GetItemDetails() => itemDetails;
     public bool IsPlayerTouchIt => exit == null;
-    private Transform womanTransform, alive, broken;
+    [SerializeField] private Transform womanTransform, alive, broken;
 
     private void Awake() {
         Init();
@@ -71,16 +71,20 @@ public class Collectible : MonoBehaviour {
         VerticalVolplane();
     }
 
-    private void VerticalVolplane() { //süzülme
-        float i = UnityEngine.Random.Range(1f, 2f);
-        transform.GetComponentInParent<Rigidbody>().transform.DOMoveY(transform.position.y + .2f, i)
-            .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+    public void SetWomanTransform(Transform womanTransform)
+    {
+        this.womanTransform = womanTransform;
     }
 
     private void Init() {
         alive = GetComponentInChildren<Transform>().Find(StringData.ALIVE);
         broken = GetComponentInChildren<Transform>().Find(StringData.BROKEN);
-        womanTransform = womanTransform != null ? womanTransform : FindObjectOfType<WomanController>().transform;
+        //womanTransform = womanTransform != null ? womanTransform : FindObjectOfType<WomanController>().transform;
+    }
+    private void VerticalVolplane() { //süzülme
+        float i = UnityEngine.Random.Range(1f, 2f);
+        transform.GetComponentInParent<Rigidbody>().transform.DOMoveY(transform.position.y + .2f, i)
+            .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
     public async void PlayCollectibleTasks() {
@@ -113,4 +117,5 @@ public class Collectible : MonoBehaviour {
     public void PlayHealUpFX() {
         if (healUpFX != null) healUpFX.Play();
     }
+
 }

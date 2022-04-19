@@ -8,6 +8,7 @@ TagManager:
   - Collectible
   - Exit
   - Woman
+  - EndGame
   layers:
   - Default
   - TransparentFX

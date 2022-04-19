@@ -15,7 +15,7 @@ public class YouWinUI : MonoBehaviour {
         womanFirstPos = woman.transform.position;
     }
 
-    public void Reload() { //activate from UI UnityEvent
+    public void Reload() { //activate from ButtonUI
         player.transform.position = handFirstPos;
         woman.transform.position = womanFirstPos;
 
