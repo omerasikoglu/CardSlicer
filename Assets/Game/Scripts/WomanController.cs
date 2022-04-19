@@ -48,18 +48,10 @@ public class WomanController : Model {
     private void OnTriggerEnter(Collider collision) {
         Collectible collectible = collision.GetComponentInParent<Collectible>();
 
-        if (collectible == null) return;
-        if (!collectible.IsPlayerTouchIt) return;
-
-        SetActiveWomanPart(collectible.GetItemDetails());
-
-        //HappyWhileWalkingTasksStart();
-        //StartCoroutine(PlayHappyWhileWalking());
-        WomanAnimationController.Instance.PlaySpin();
+       
 
 
-        collision.gameObject.SetActive(false);
-        StartCoroutine(UtilsClass.Wait(() => { Destroy(collision.gameObject); }, 1f));
+        
     }
 
     private void InitItems() {
@@ -100,13 +92,13 @@ public class WomanController : Model {
 
     public void SetActiveWomanPart(ItemDetails itemDetails) {
 
+        //TODO: Make It SOLID
+
         var dress = itemDetails.dress;
         var hair = itemDetails.hair;
         var shoes = itemDetails.shoes;
         var purse = itemDetails.purse;
         var watch = itemDetails.watch;
-
-        //Debug.Log(itemDetails.purse); Debug.Log(itemDetails.shoes); Debug.Log(itemDetails.watch); Debug.Log(itemDetails.hair); Debug.Log(itemDetails.dress);
 
         if (dress != 0 && dress != DressVariant.None)
         {
@@ -142,6 +134,7 @@ public class WomanController : Model {
             ringList[0].gameObject.SetActive(true);
         }
 
+        WomanAnimationController.Instance.PlaySpin();
         PlayHanabiFX();
     }
 
@@ -153,35 +146,7 @@ public class WomanController : Model {
 
     }
 
-    private IEnumerator PlayHappyWhileWalking() {
-        
-        float rotateTime = .4f;
 
-        WomanAnimationController.Instance.PlayHappy();
-        transform.DORotate(new Vector3(0, -180, 0), rotateTime);
-        yield return new WaitForSeconds(rotateTime);
-        transform.DOMoveY(0f, .6f);
-        transform.DORotate(Vector3.zero, rotateTime);
-        yield return new WaitForSeconds(rotateTime);
-        CheckCatWalk();
-    }
-    public IEnumerator PlayTearsWhileWalking() {
-        float rotateTime = .4f;
-
-        WomanAnimationController.Instance.PlayCry();
-        transform.DORotate(new Vector3(0, -180, 0), rotateTime);
-        yield return new WaitForSeconds(rotateTime);
-        transform.DOMoveY(0f, .6f);
-        transform.DORotate(Vector3.zero, rotateTime);
-        yield return new WaitForSeconds(rotateTime);
-
-        CheckCatWalk();
-
-
-
-    }
-
-   
     private static void CheckCatWalk()
     {
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) >= 2)
@@ -194,39 +159,8 @@ public class WomanController : Model {
         }
     }
 
-    //[Button]
-    //private async Task HappyWhileWalkingTasksStart() {
-    //    await PlayAnimationTask(() =>
-    //    {
-    //        WomanAnimationController.Instance.PlayHappy();
-    //    });
-    //}
-    //[Button]
-    //public async Task CryWhileWalkingTasksStart() {
-    //    await PlayAnimationTask(() =>
-    //    {
-    //        WomanAnimationController.Instance.PlayCry();
-    //    });
-    //}
-    //private async Task PlayAnimationTask(Action action) {
-    //    float rotateTime = .4f;
-
-    //    List<Task> taskList = new List<Task>
-    //    {
-    //        transform.DORotate(new Vector3(0,-180,0), rotateTime).AsyncWaitForCompletion()
-    //    };
-    //    await Task.WhenAll(taskList);
-    //    action();
-    //    taskList.Add(transform.DOMoveY(0f, .6f).AsyncWaitForCompletion());
-    //    await Task.WhenAll(taskList);
-    //    taskList.Add(transform.DORotate(Vector3.zero, rotateTime).AsyncWaitForCompletion());
-    //    await Task.WhenAll(taskList);
-    //    WomanAnimationController.Instance.PlayCatWalk();
-
-
-    //}
-
     #region FX
+    //TODO: Make it ENUM and 1 List
     public void PlayGoodFX() => PlayFX(particleList[0]);
     public void PlayBadFX() => PlayFX(particleList[1]);
     public void PlayLoseFX() => PlayFX(particleList[2]);

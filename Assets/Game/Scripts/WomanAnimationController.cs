@@ -33,6 +33,7 @@ public class WomanAnimationController : Singleton<WomanAnimationController>
         }
     }
 
+    //TODO: USE THEM WITH 1 LIST
     [Button]
     public void PlayIdle()
     {

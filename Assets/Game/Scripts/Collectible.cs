@@ -71,8 +71,7 @@ public class Collectible : MonoBehaviour {
         VerticalVolplane();
     }
 
-    public void SetWomanTransform(Transform womanTransform)
-    {
+    public void SetWomanTransform(Transform womanTransform) {
         this.womanTransform = womanTransform;
     }
 
@@ -87,35 +86,43 @@ public class Collectible : MonoBehaviour {
             .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
-    public async void PlayCollectibleTasks() {
+    public void PlayCollectibleTasks(Vector3 womanPos) {
         if (hasExit) Destroy(exit);
-
-        if (isFallingDown) //Breaking Collectible
-        {
-            alive.gameObject.SetActive(false);
-            broken.gameObject.SetActive(true);
-            StartCoroutine(UtilsClass.Wait(() => { Destroy(transform.parent.gameObject); }, 1f));
-            return;
-        }
-
         var position = transform.position;
         Vector3 womanPosDelta = new Vector3(0f, 2f, 2.5f); //womanTransform's pos after 1 sec delay
 
         float height = UnityEngine.Random.Range(1.5f, 2f), ascendTime = UnityEngine.Random.Range(.3f, .4f);
-        List<Task> taskList = new List<Task>
+        
+        transform.DOMoveZ(position.z + 5f, ascendTime);
+        transform.DOMoveY(position.y + height, ascendTime).OnComplete(() =>
         {
-            transform.DOMoveZ(position.z + 5f, ascendTime).AsyncWaitForCompletion(),
-            transform.DOMoveY(position.y + height, ascendTime).AsyncWaitForCompletion()
-        };
-        await Task.WhenAll(taskList);
-        taskList.Add(transform.DOScale(transform.localScale * 2f, ascendTime).AsyncWaitForCompletion());
-        taskList.Add(transform.DORotate(new Vector3(0f, 90f, 0f), ascendTime).AsyncWaitForCompletion());
-        await Task.WhenAll(taskList);
-        if (transform != null) taskList.Add(transform.DOMove(womanTransform.position + womanPosDelta, 1f).AsyncWaitForCompletion());
-    }
+            transform.DOScale(transform.localScale * 2f, ascendTime);
+            transform.DORotate(new Vector3(0f, 90f, 0f), ascendTime).OnComplete(() =>
+            {
+                if (transform != null)
+                    transform.DOMove(womanPos + womanPosDelta, 1f);
+            });
+        });
 
+        
+
+    }
     public void PlayHealUpFX() {
         if (healUpFX != null) healUpFX.Play();
     }
 
+    private void OnTriggerEnter(Collider collision) {
+
+        PlayerController player = collision.attachedRigidbody.GetComponent<PlayerController>();
+        if (player != null) {
+            player.AffordMoney(this);
+        }
+
+        WomanController woman = collision.GetComponent<WomanController>();
+        if (woman != null && IsPlayerTouchIt) {
+            woman.SetActiveWomanPart(itemDetails);
+
+            Destroy(gameObject);
+        }
+    }
 }

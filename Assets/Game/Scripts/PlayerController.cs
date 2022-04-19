@@ -13,8 +13,6 @@ public class PlayerController : Model {
     [SerializeField, Foldout("[Options]")] private int unhappinessThreshold = 2;
     [SerializeField, Foldout("[Input]")] private InputManager inputManager;
     [SerializeField, Foldout("[Input]")] private bool isSlideMovementYActive, isSlideMovementXActive, isSlideRotateZActive;
-    [SerializeField, Foldout("[Ray]")] private LayerMask targetLayerMask;
-    [SerializeField, Foldout("[Ray]")] private Material emissionMaterial;
 
     [SerializeField] private Transform playerRoot;
     [SerializeField] private WomanController womanController;
@@ -62,62 +60,7 @@ public class PlayerController : Model {
         base.Update();
         CheckRotationLimits();
     }
-
-    private void FixedUpdate() {
-        //Lighto();
-    }
-
-    private void Lighto() {
-        Bounds bounds = cardCollider.bounds;
-        float rayLength = 2f;
-        RaycastHit hitInfo;
-
-        bool isHitCollectible = Physics.BoxCast(
-            center: new Vector3(bounds.center.x, bounds.center.y, bounds.max.z),
-            halfExtents: new Vector3(bounds.extents.x, bounds.extents.y),
-            direction: Vector3.forward,
-            hitInfo: out hitInfo,
-            orientation: Quaternion.identity,
-            maxDistance: rayLength,
-            layerMask: targetLayerMask
-            );
-
-        Color rayColor = isHitCollectible ? Color.green : Color.red;
-        //Color rayColor = raycastHits.Length != 0 ? Color.green : Color.red;
-        //emissionMaterial.SetColor("_EmissionColor", rayColor);
-        DrawRectangleRay(cardCollider.bounds, Vector3.forward, rayLength, rayColor);
-
-    }
-
-    private void DrawRectangleRay(Bounds bounds, Vector3 dir, float rayLength, Color rayColor) {
-        Debug.DrawRay( //top right
-            start: bounds.max,
-            dir: dir * rayLength,
-            color: rayColor
-        );
-        Debug.DrawRay( //top left
-            start: new Vector3(bounds.min.x, bounds.max.y, bounds.max.z),
-            dir: dir * rayLength,
-            color: rayColor
-        );
-        Debug.DrawRay( //bottom right
-            start: new Vector3(bounds.max.x, bounds.min.y, bounds.max.z),
-            dir: dir * rayLength,
-            color: rayColor
-        );
-        Debug.DrawRay( //bottom left
-            start: new Vector3(bounds.min.x, bounds.min.y, bounds.max.z),
-            dir: dir * rayLength,
-            color: rayColor
-        );
-    }
     private void OnTriggerEnter(Collider collision) {
-
-        Collectible collectible = collision.GetComponent<Collectible>();
-        if (collectible != null) {
-            //Debug.Log("collected");
-            AffordMoney(collectible);
-        }
 
         if (collision.CompareTag("EndGame")) {
             //Debug.Log("endgame");
@@ -127,9 +70,13 @@ public class PlayerController : Model {
         if (collision.CompareTag(StringData.EXIT)) {
             //Debug.Log("item exit");
             IncreaseUnhappiness();
-            //Destroy(collision.GetComponentInParent<Rigidbody>().gameObject);
         }
 
+    }
+
+    public Vector3 GetWomanPosition()
+    {
+        return womanController.transform.position;
     }
     public void AffordMoney(Collectible collectible) {
         int moneyAmount = collectible.GetItemDetails().money;
@@ -141,8 +88,6 @@ public class PlayerController : Model {
             return;
         }
 
-        //if (moneyAmount >= 0 && PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) > 0) UnhappinessBar.Instance.ResetBar();
-
         currentMoney += moneyAmount;
         PlayerPrefs.SetInt(StringData.PREF_MONEY, currentMoney);
         PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
@@ -151,7 +96,7 @@ public class PlayerController : Model {
         CheckCardMaterial();
         collectible.PlayHealUpFX();
         womanController.PlayGoodFX();
-        collectible.PlayCollectibleTasks();
+        collectible.PlayCollectibleTasks(GetWomanPosition());
     }
 
     public void CheckCardMaterial() {
@@ -190,7 +135,8 @@ public class PlayerController : Model {
             PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1);
 
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) < unhappinessThreshold) {
-            StartCoroutine(womanController.PlayTearsWhileWalking());
+            //TODO: Woman starts to crying
+
         }
         else {
             GameManager.Instance.ChangeState(GameState.Lose);
