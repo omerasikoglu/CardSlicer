@@ -27,5 +27,6 @@ public struct StringData
     public const string CRY = "cry";
     public const string KISS = "kiss";
     public const string CAT_WALK = "catWalk";
+    public const string SPIN = "spin";
 
 }

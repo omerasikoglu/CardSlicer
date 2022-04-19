@@ -33,11 +33,11 @@ public class WomanController : Model {
         {
             case GameState.TapToPlay: SetMovementSpeed(0); break;
             case GameState.Run: SetMovementSpeed(2); break;
-            case GameState.WinGame:
+            case GameState.Win:
                 PlayGoodFX();
                 SetMovementSpeed(0);
                 break;
-            case GameState.LoseGame:
+            case GameState.Lose:
                 //PlayLoseFX();
                 SetMovementSpeed(0);
                 break;
@@ -54,7 +54,9 @@ public class WomanController : Model {
         SetActiveWomanPart(collectible.GetItemDetails());
 
         //HappyWhileWalkingTasksStart();
-        StartCoroutine(PlayHappyWhileWalking());
+        //StartCoroutine(PlayHappyWhileWalking());
+        WomanAnimationController.Instance.PlaySpin();
+
 
         collision.gameObject.SetActive(false);
         StartCoroutine(UtilsClass.Wait(() => { Destroy(collision.gameObject); }, 1f));
@@ -152,6 +154,7 @@ public class WomanController : Model {
     }
 
     private IEnumerator PlayHappyWhileWalking() {
+        
         float rotateTime = .4f;
 
         WomanAnimationController.Instance.PlayHappy();
@@ -178,6 +181,7 @@ public class WomanController : Model {
 
     }
 
+   
     private static void CheckCatWalk()
     {
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) >= 2)

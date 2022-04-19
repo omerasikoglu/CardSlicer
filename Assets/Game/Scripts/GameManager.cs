@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Android;
+using UnityEngine.Rendering;
 
 [Serializable]
 public enum GameState {
     TapToPlay = 1,
     Run = 2,
-    WinGame = 3,
-    LoseGame = 4
+    Win = 3,
+    Lose = 4
 }
 [DefaultExecutionOrder(-2)]
 public class GameManager : Singleton<GameManager> {
@@ -39,8 +40,8 @@ public class GameManager : Singleton<GameManager> {
         {
             case GameState.TapToPlay: TapToPlay(); break;
             case GameState.Run: Run(); break;
-            case GameState.WinGame: WinGame(); break;
-            case GameState.LoseGame: LoseGame(); break;
+            case GameState.Win: WinGame(); break;
+            case GameState.Lose: LoseGame(); break;
             default: break;
         }
 
@@ -64,5 +65,10 @@ public class GameManager : Singleton<GameManager> {
     public void SetRunningState()
     {
         ChangeState(GameState.Run);
+    }
+
+    public void SetWinningState()
+    {
+        ChangeState(GameState.Win);
     }
 }

@@ -35,10 +35,10 @@ public class UIManager : Singleton<UIManager> {
             case GameState.Run:
                 ShowUI(GameUI.InGame);
                 break;
-            case GameState.WinGame:
+            case GameState.Win:
                 ShowUI(GameUI.Win);
                 break;
-            case GameState.LoseGame:
+            case GameState.Lose:
                 ShowUI(GameUI.Lose);
                 break;
             default: break;

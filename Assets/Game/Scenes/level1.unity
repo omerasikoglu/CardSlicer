@@ -174,7 +174,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: de3a4a1c2e5c0914f9abceecb1f5ad92, type: 2}
+  - {fileID: 2100000, guid: 649ba807191a1ce43a6bcbd6e15eaa21, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -816,7 +816,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: de3a4a1c2e5c0914f9abceecb1f5ad92, type: 2}
+  - {fileID: 2100000, guid: 649ba807191a1ce43a6bcbd6e15eaa21, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -900,6 +900,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 838616750}
+  - component: {fileID: 838616751}
   m_Layer: 0
   m_Name: EndGameArea
   m_TagString: Untagged
@@ -915,13 +916,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838616749}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 40}
+  m_LocalPosition: {x: 0, y: 0, z: 49.11}
   m_LocalScale: {x: 8, y: 1, z: 1}
   m_Children:
   - {fileID: 315146253}
   m_Father: {fileID: 887921667}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &838616751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838616749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85f19bf6c5780f64cb584f5a55045bbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &887022913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1235,7 +1248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3835115965207429369, guid: 015847d8a3c934145bacbc4ed7bf4bcb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 23
+      value: 31.26
       objectReference: {fileID: 0}
     - target: {fileID: 3835115965207429369, guid: 015847d8a3c934145bacbc4ed7bf4bcb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2008,7 +2021,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3835115965207429369, guid: 015847d8a3c934145bacbc4ed7bf4bcb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 24
+      value: 29.22
       objectReference: {fileID: 0}
     - target: {fileID: 3835115965207429369, guid: 015847d8a3c934145bacbc4ed7bf4bcb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2061,7 +2074,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1843235173
 Transform:
   m_ObjectHideFlags: 0

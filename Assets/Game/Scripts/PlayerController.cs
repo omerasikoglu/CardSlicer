@@ -22,7 +22,9 @@ public class PlayerController : Model {
     [SerializeField] private TextMeshProUGUI textMesh;
 
     [SerializeField, Foldout("[Card]")] private List<Material> materialList;
+    private Material currentMaterial;
     [SerializeField, Foldout("[Card]")] private MeshRenderer cardMeshRenderer;
+    [SerializeField, Foldout("[Card]")] private ParticleSystem upgrade1FX, upgrade2FX;
 
     private Vector3 womanFirstPos;
     private Vector3 handFirstPos;
@@ -42,15 +44,16 @@ public class PlayerController : Model {
 
         handFirstPos = transform.position;
         womanFirstPos = womanController.transform.position;
+
+        currentMaterial = materialList[0];
     }
 
     private void GameManager_OnStateChanged(GameState obj) {
-        switch (obj)
-        {
+        switch (obj) {
             case GameState.TapToPlay: SetMovementSpeed(0); break;
             case GameState.Run: SetMovementSpeed(2); break;
-            case GameState.WinGame: SetMovementSpeed(0); break;
-            case GameState.LoseGame: SetMovementSpeed(0); break;
+            case GameState.Win: SetMovementSpeed(0); break;
+            case GameState.Lose: SetMovementSpeed(0); break;
             default: break;
         }
     }
@@ -111,21 +114,18 @@ public class PlayerController : Model {
     private void OnTriggerEnter(Collider collision) {
 
         Collectible collectible = collision.GetComponent<Collectible>();
-        if (collectible != null)
-        {
+        if (collectible != null) {
             Debug.Log("collected");
             AffordMoney(collectible);
         }
 
         EndGameArea endGameArea = collision.GetComponentInParent<EndGameArea>();
-        if (endGameArea != null)
-        {
+        if (endGameArea != null) {
             Debug.Log("endgame");
-            GameManager.Instance.ChangeState(GameState.WinGame);
+            GameManager.Instance.ChangeState(GameState.Win);
         }
 
-        if (collision.CompareTag(StringData.EXIT))
-        {
+        if (collision.CompareTag(StringData.EXIT)) {
             Debug.Log("item exit");
             IncreaseUnhappiness();
             //Destroy(collision.GetComponentInParent<Rigidbody>().gameObject);
@@ -136,8 +136,7 @@ public class PlayerController : Model {
         int moneyAmount = collectible.GetItemDetails().money;
         int currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY, 0);
 
-        if (currentMoney + moneyAmount < 0)
-        {
+        if (currentMoney + moneyAmount < 0) {
             Debug.Log("not enough money");
             //womanController.PlayBadFX();
             return;
@@ -151,22 +150,39 @@ public class PlayerController : Model {
         textMesh.SetText($"{PlayerPrefs.GetInt(StringData.PREF_MONEY)}$");
 
         CheckCardMaterial();
-
+        collectible.PlayHealUpFX();
         womanController.PlayGoodFX();
         collectible.PlayCollectibleTasks();
     }
 
-    private void CheckCardMaterial() {
+    public void CheckCardMaterial() {
         int currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY);
-        cardMeshRenderer.material = (currentMoney / 300) switch
+
+        int moneyAmount = currentMoney / 300;
+        cardMeshRenderer.material = moneyAmount switch
         {
             0 => materialList[0],
             1 => materialList[1],
             2 => materialList[2],
             _ => materialList[2],
         };
-    }
 
+        //if (cardMeshRenderer.material == currentMaterial) return;
+
+        switch (moneyAmount) {
+            case 1: PlayFX(upgrade1FX); break;
+            case 2: PlayFX(upgrade2FX); break;
+            default: break;
+        }
+        currentMaterial = cardMeshRenderer.material;
+    }
+    private void PlayFX(ParticleSystem particle, int isOldEmitPending = 0) {
+        //isOldEmitPending => 0 stop instantly
+        upgrade1FX.Stop(true, (ParticleSystemStopBehavior)isOldEmitPending);
+        upgrade2FX.Stop(true, (ParticleSystemStopBehavior)isOldEmitPending);
+
+        particle.Play();
+    }
     private void IncreaseUnhappiness() {
 
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1 > unhappinessThreshold) return;
@@ -174,13 +190,11 @@ public class PlayerController : Model {
         PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS,
             PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1);
 
-        if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) < unhappinessThreshold)
-        {
+        if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) < unhappinessThreshold) {
             StartCoroutine(womanController.PlayTearsWhileWalking());
         }
-        else
-        {
-            GameManager.Instance.ChangeState(GameState.LoseGame);
+        else {
+            GameManager.Instance.ChangeState(GameState.Lose);
         }
     }
 

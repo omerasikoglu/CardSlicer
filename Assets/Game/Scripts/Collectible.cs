@@ -59,6 +59,7 @@ public class Collectible : MonoBehaviour {
     [SerializeField, BoxGroup("[Destroy Style]")] private bool isFallingDown;
     [SerializeField, BoxGroup("[Collider]")] private bool hasExit;
     [SerializeField, BoxGroup("[Collider]"), EnableIf("hasExit")] private GameObject exit;
+    [SerializeField] private ParticleSystem healUpFX;
 
     public ItemDetails GetItemDetails() => itemDetails;
     public bool IsPlayerTouchIt => exit == null;
@@ -109,4 +110,7 @@ public class Collectible : MonoBehaviour {
         if (transform != null) taskList.Add(transform.DOMove(womanTransform.position + womanPosDelta, 1f).AsyncWaitForCompletion());
     }
 
+    public void PlayHealUpFX() {
+        if (healUpFX != null) healUpFX.Play();
+    }
 }

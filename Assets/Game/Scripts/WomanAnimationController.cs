@@ -23,10 +23,10 @@ public class WomanAnimationController : Singleton<WomanAnimationController>
             case GameState.Run:
                 PlayCatWalk();
                 break;
-            case GameState.WinGame:
+            case GameState.Win:
                 PlayHappy();
                 break;
-            case GameState.LoseGame:
+            case GameState.Lose:
                 PlayCry();
                 break;
             default: break;
@@ -57,5 +57,9 @@ public class WomanAnimationController : Singleton<WomanAnimationController>
     public void PlayCatWalk()
     {
         womanAnimator.SetTrigger(StringData.CAT_WALK);
+    } [Button]
+    public void PlaySpin()
+    {
+        womanAnimator.SetTrigger(StringData.SPIN);
     }
 }
