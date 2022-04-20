@@ -123,6 +123,49 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &17266368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 17266369}
+  - component: {fileID: 17266370}
+  m_Layer: 0
+  m_Name: SceneHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &17266369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 17266368}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 446970531}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &17266370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 17266368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83ea1b04b2e324a40adae03c454e5ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &19594504
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,6 +714,7 @@ Transform:
   - {fileID: 1333864660}
   - {fileID: 426093765}
   - {fileID: 1482597403}
+  - {fileID: 17266369}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3014,10 +3058,6 @@ MonoBehaviour:
   isSlideMovementYActive: 0
   isSlideMovementXActive: 0
   isSlideRotateZActive: 1
-  targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  emissionMaterial: {fileID: 2100000, guid: 48f55931cd9033c4fbfedb8b41fd20d8, type: 2}
   playerRoot: {fileID: 1316445117}
   womanController: {fileID: 203701172199460820}
   textMesh: {fileID: 1519812812}
@@ -3769,7 +3809,7 @@ GameObject:
   - component: {fileID: 203701172199460821}
   m_Layer: 0
   m_Name: visual
-  m_TagString: Untagged
+  m_TagString: Woman
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

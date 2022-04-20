@@ -3,6 +3,7 @@ public struct StringData
     //PlayerPref
     public const string PREF_MONEY = "money";
     public const string PREF_UNHAPPINESS = "unhappiness";
+    public const string PREF_LEVEL = "level";
 
     //Scene
     public const string MAIN_SCENE = "MainScene";

@@ -79,6 +79,8 @@ public class PlayerController : Model {
         return womanController.transform.position;
     }
     public void AffordMoney(Collectible collectible) {
+        
+        
         int moneyAmount = collectible.GetItemDetails().money;
         int currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY, 0);
 
