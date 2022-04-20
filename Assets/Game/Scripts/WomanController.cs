@@ -21,8 +21,6 @@ public class WomanController : Model {
     [SerializeField] private List<Transform> necklaceList;
     [SerializeField] private List<Transform> ringList;
 
-    [SerializeField] private List<ParticleSystem> particleList; //0=>good, 1=>bad, 2=>lose, 3=>hanabi
-
     private void Awake() {
         GameManager.OnStateChanged += GameManager_OnStateChanged;
         InitItems();
@@ -34,7 +32,6 @@ public class WomanController : Model {
             case GameState.TapToPlay: SetMovementSpeed(0); break;
             case GameState.Run: SetMovementSpeed(2); break;
             case GameState.Win:
-                PlayGoodFX();
                 SetMovementSpeed(0);
                 break;
             case GameState.Lose:
@@ -43,15 +40,6 @@ public class WomanController : Model {
                 break;
             default: break;
         }
-    }
-
-    private void OnTriggerEnter(Collider collision) {
-        Collectible collectible = collision.GetComponentInParent<Collectible>();
-
-       
-
-
-        
     }
 
     private void InitItems() {
@@ -135,7 +123,6 @@ public class WomanController : Model {
         }
 
         WomanAnimationController.Instance.PlaySpin();
-        PlayHanabiFX();
     }
 
     private void SetDeactivateListComponents(List<Transform> list) {
@@ -158,22 +145,4 @@ public class WomanController : Model {
             WomanAnimationController.Instance.PlayCatWalk();
         }
     }
-
-    #region FX
-    //TODO: Make it ENUM and 1 List
-    public void PlayGoodFX() => PlayFX(particleList[0]);
-    public void PlayBadFX() => PlayFX(particleList[1]);
-    public void PlayLoseFX() => PlayFX(particleList[2]);
-    private void PlayHanabiFX() => PlayFX(particleList[3], 1);
-
-    private void PlayFX(ParticleSystem particle, int isOldEmitPending = 0) {
-        //isOldEmitPending => 0 stop instantly
-        foreach (ParticleSystem st in particleList)
-        {
-            st.Stop(true, (ParticleSystemStopBehavior)isOldEmitPending);
-        }
-        particle.Play();
-    }
-    #endregion
-
 }

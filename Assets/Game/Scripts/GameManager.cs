@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Android;
-using UnityEngine.Rendering;
 
 [Serializable]
 public enum GameState {
@@ -15,20 +14,20 @@ public enum GameState {
 [DefaultExecutionOrder(-2)]
 public class GameManager : Singleton<GameManager> {
     public static event Action<GameState> OnStateChanged;
-    private GameState activeState;
+
+    [SerializeField, ReadOnly] private GameState activeState;
 
     private void Awake() {
         InitPlayerPrefs();
-        
     }
 
-    private static void InitPlayerPrefs() {
+    private void InitPlayerPrefs() {
         PlayerPrefs.SetInt(StringData.PREF_MONEY, 0);
         PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
+
     }
 
-    private void Start()
-    {
+    private void Start() {
         ChangeState(GameState.TapToPlay);
     }
     public void ChangeState(GameState newState) {
@@ -36,8 +35,7 @@ public class GameManager : Singleton<GameManager> {
 
         activeState = newState;
 
-        switch (newState)
-        {
+        switch (newState) {
             case GameState.TapToPlay: TapToPlay(); break;
             case GameState.Run: Run(); break;
             case GameState.Win: WinGame(); break;
@@ -62,13 +60,11 @@ public class GameManager : Singleton<GameManager> {
 
     }
 
-    public void SetRunningState()
-    {
+    public void SetRunningState() {
         ChangeState(GameState.Run);
     }
 
-    public void SetWinningState()
-    {
+    public void SetWinningState() {
         ChangeState(GameState.Win);
     }
 }

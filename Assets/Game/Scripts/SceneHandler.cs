@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
@@ -5,31 +6,36 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour {
-    [SerializeField] private int currentLevel;
+    [SerializeField, ReadOnly] private int currentLevel;
     [SerializeField] private bool isAutoLoad;
-    private int TotalLevelCount => SceneManager.sceneCountInBuildSettings - 2;
+    [SerializeField] private int nonLevelSceneCount = 2;
+
+    private int TotalLevelCount => SceneManager.sceneCountInBuildSettings - nonLevelSceneCount;
     //1 for main, 1 for environment. all others level scene
-    private void Start() {
+
+    private void Awake() {
+        currentLevel = 1;
+        PlayerPrefs.SetInt(StringData.PREF_LEVEL, currentLevel);
         if (!isAutoLoad) return;
         SceneLoadCheck();
     }
 
     private void SceneLoadCheck() {
-        currentLevel = 0;
 
-        int[] exactLevelIndexs = { 0, 2 };
-        foreach (var t in exactLevelIndexs) {
-            if (SceneManager.GetActiveScene().buildIndex != t) {
-                SceneManager.LoadSceneAsync(t, LoadSceneMode.Additive);
+        //load main scene and environments
+        for (int levelIndex = 0; levelIndex < nonLevelSceneCount; levelIndex++) {
+            if (SceneManager.GetActiveScene().buildIndex != levelIndex) {
+                SceneManager.LoadSceneAsync(levelIndex, LoadSceneMode.Additive);
             }
         }
 
-        bool isAnyLevel = false;
-        for (int i = 1; i < 4; i++) { //load 1st level when there is no level
-            if (SceneManager.GetActiveScene().buildIndex == i) isAnyLevel = true;
+        //check any level is loaded
+        bool isLoad = false;
+        for (int levelIndex = 0; levelIndex < TotalLevelCount; levelIndex++) { //load 1st level when there is no level
+            if (SceneManager.GetActiveScene().buildIndex == levelIndex + nonLevelSceneCount)
+                isLoad = true;
         }
-
-        if (!isAnyLevel) SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+        if (!isLoad) SceneManager.LoadSceneAsync(nonLevelSceneCount, LoadSceneMode.Additive);
     }
 
     [Button]
@@ -37,9 +43,12 @@ public class SceneHandler : MonoBehaviour {
 
         UnloadThisLevel();
 
-        currentLevel += currentLevel == TotalLevelCount ? 1 - TotalLevelCount : 1;  //when reach the max level
+        currentLevel -= currentLevel + 1 > TotalLevelCount ? TotalLevelCount : 0;  //when reach the max level
+        currentLevel++;
 
         LoadCurrentLevel();
+
+        GameManager.Instance.ChangeState(GameState.TapToPlay);
     }
     [Button]
     public void ReloadThisLevel() { //from ButtonUI
@@ -50,12 +59,10 @@ public class SceneHandler : MonoBehaviour {
     }
 
     private void UnloadThisLevel() {
-        currentLevel = PlayerPrefs.GetInt(StringData.PREF_LEVEL);
-        SceneManager.UnloadSceneAsync(currentLevel);
+        SceneManager.UnloadSceneAsync(currentLevel + nonLevelSceneCount - 1);
     }
     private void LoadCurrentLevel() {
         PlayerPrefs.SetInt(StringData.PREF_LEVEL, currentLevel);
-        currentLevel = PlayerPrefs.GetInt(StringData.PREF_LEVEL);
-        SceneManager.UnloadSceneAsync(currentLevel);
+        SceneManager.LoadSceneAsync(currentLevel + nonLevelSceneCount - 1, LoadSceneMode.Additive);
     }
 }

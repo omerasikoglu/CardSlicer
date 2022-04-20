@@ -5,8 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using NaughtyAttributes;
 using DG.Tweening;
 using TMPro;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : Model {
     [SerializeField, Foldout("[Options]")] private float rotationSpeed = 3f, rotationLimitZ = .65f, eulerAngleLimitZ = 75f;
@@ -28,7 +26,7 @@ public class PlayerController : Model {
     private Vector3 handFirstPos;
 
     private BoxCollider cardCollider;
-    private bool isTouchingScreen;
+    private bool isTouchingScreen, canMove;
 
     private Vector3 goCoord, worldOffsetPos;
     private Vector3 eulerLeft, eulerRight;
@@ -48,7 +46,7 @@ public class PlayerController : Model {
 
     private void GameManager_OnStateChanged(GameState obj) {
         switch (obj) {
-            case GameState.TapToPlay: SetMovementSpeed(0); break;
+            case GameState.TapToPlay: ReloadPositions(); break;
             case GameState.Run: SetMovementSpeed(2); break;
             case GameState.Win: SetMovementSpeed(0); break;
             case GameState.Lose: SetMovementSpeed(0); break;
@@ -62,11 +60,6 @@ public class PlayerController : Model {
     }
     private void OnTriggerEnter(Collider collision) {
 
-        if (collision.CompareTag("EndGame")) {
-            //Debug.Log("endgame");
-            GameManager.Instance.ChangeState(GameState.Win);
-        }
-
         if (collision.CompareTag(StringData.EXIT)) {
             //Debug.Log("item exit");
             IncreaseUnhappiness();
@@ -74,31 +67,13 @@ public class PlayerController : Model {
 
     }
 
-    public Vector3 GetWomanPosition()
-    {
+    public Vector3 GetWomanPosition() {
         return womanController.transform.position;
     }
-    public void AffordMoney(Collectible collectible) {
-        
-        
-        int moneyAmount = collectible.GetItemDetails().money;
-        int currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY, 0);
+    public void ItemCollected(Collectible collectible) {
 
-        if (currentMoney + moneyAmount < 0) {
-            Debug.Log("not enough money");
-            //womanController.PlayBadFX();
-            return;
-        }
-
-        currentMoney += moneyAmount;
-        PlayerPrefs.SetInt(StringData.PREF_MONEY, currentMoney);
-        PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
         textMesh.SetText($"{PlayerPrefs.GetInt(StringData.PREF_MONEY)}$");
-
         CheckCardMaterial();
-        collectible.PlayHealUpFX();
-        womanController.PlayGoodFX();
-        collectible.PlayCollectibleTasks(GetWomanPosition());
     }
 
     public void CheckCardMaterial() {
@@ -145,18 +120,13 @@ public class PlayerController : Model {
         }
     }
 
-    public void Reload() { //activate from UI UnityEvent
+    public void ReloadPositions() {
+
+        SetMovementSpeed(0);
         transform.position = handFirstPos;
         womanController.transform.position = womanFirstPos;
 
-        PlayerPrefs.SetInt(StringData.PREF_MONEY, 0);
-        PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
         CheckCardMaterial();
-
-        SceneManager.UnloadSceneAsync(1);
-        SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
-        GameManager.Instance.ChangeState(GameState.Run);
-
     }
 
     #region Rotation
@@ -181,17 +151,16 @@ public class PlayerController : Model {
     }
 
     private void OnTouchPerformed(Vector2 coord) {
-        Ray ray = UtilsClass.GetScreenPointToRay(coord);
-        Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
+        //Ray ray = UtilsClass.GetScreenPointToRay(coord);
+        //Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
 
-        //if (!Physics.Raycast(ray, out RaycastHit hit, 150f)) return; if (hit.collider.CompareTag("Player"))  
         isTouchingScreen = true;
     }
     private void OnTouchEnded() {
         isTouchingScreen = false;
     }
     private void OnSlideMovementPerformed(Vector2 slideOffset) {
-        if (!isTouchingScreen) return;
+        if (!isTouchingScreen || !canMove) return;
         if (!isSlideMovementYActive && !isSlideMovementXActive) return;
 
         Vector3 goWorldPosition = gameObject.transform.position;

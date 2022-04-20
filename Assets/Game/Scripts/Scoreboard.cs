@@ -9,33 +9,47 @@ using DG.Tweening;
 public enum IncreaseStyle {
     LeftToRight, BottomToUp,
 }
-public class Scoreboard : Singleton<Scoreboard> {
-    [SerializeField, BoxGroup("[Transforms]")] private Transform collectibleRoot;
+public class Scoreboard : MonoBehaviour {
+
     [SerializeField, BoxGroup("[Transforms]")] private Transform pointerTransform;
-    //[SerializeField, BoxGroup("[Meshes]")] private MeshRenderer scoreboardMesh, pointerMesh;
+
+    [SerializeField] private MeshRenderer pointerRenderer;
 
     [SerializeField] private IncreaseStyle increaseStyle;
-    [SerializeField] private int acquiredCollectibleAmount = 10;
-    [SerializeField] private float reachTime = 5f;
 
-
+    [SerializeField] private float pointerReachTime = 5f;
 
     private float finalValue; // complete amount, normalized
 
-    private int TotalCollectibleAmount => collectibleRoot.childCount;
-    //private Vector2 scoreboardSize => scoreboardMesh.bounds.size;
-
-
     private void Awake() {
+        
         SetFirstNormalizedPointerPosition();
+        Debug.Log($"<Color=red>{pointerRenderer.bounds.size}</Color>");
 
-        StartScoreboard();
     }
 
-    private void StartScoreboard() {
-        finalValue = Mathf.InverseLerp(0, TotalCollectibleAmount, acquiredCollectibleAmount);
+    private void OnEnable()
+    {
+        GameManager.OnStateChanged += GameManager_OnStateChanged;
+    }
 
-        pointerTransform.DOLocalMove(SetFinalNormalizedPointerPosition(), 5f).SetEase(Ease.OutSine);
+    private void OnDisable() {
+        GameManager.OnStateChanged -= GameManager_OnStateChanged;
+    }
+
+    private void GameManager_OnStateChanged(GameState gameState)
+    {
+        if (gameState != GameState.Win) return;
+        TriggerTheScoreboard();
+    }
+
+    [Button]
+    public void TriggerTheScoreboard() {
+       
+        finalValue = Mathf.InverseLerp(
+            0, Collectibles.Instance.GetCollectibleCount, PlayerPrefs.GetInt(StringData.PREF_COLLECTED));
+
+        pointerTransform.DOLocalMove(SetFinalNormalizedPointerPosition(), pointerReachTime).SetEase(Ease.OutSine);
     }
 
     private void SetFirstNormalizedPointerPosition() {
@@ -46,6 +60,9 @@ public class Scoreboard : Singleton<Scoreboard> {
             IncreaseStyle.BottomToUp => Vector3.right,
             _ => Vector3.zero
         };
+
+        pointerRenderer.transform.position -= new Vector3(
+            pointerRenderer.bounds.extents.x, pointerRenderer.bounds.extents.y);
     }
     private Vector3 SetFinalNormalizedPointerPosition() {
         return increaseStyle switch

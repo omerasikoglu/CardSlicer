@@ -4,6 +4,7 @@ public struct StringData
     public const string PREF_MONEY = "money";
     public const string PREF_UNHAPPINESS = "unhappiness";
     public const string PREF_LEVEL = "level";
+    public const string PREF_COLLECTED = "collected";
 
     //Scene
     public const string MAIN_SCENE = "MainScene";
@@ -11,6 +12,8 @@ public struct StringData
     //Collision
     public const string EXIT = "Exit";
     public const string PLAYER = "Player";
+    public const string END_GAME = "EndGame";
+    public const string CARD = "Card";
 
     //UI
     public const string BAR = "bar";
