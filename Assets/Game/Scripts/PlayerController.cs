@@ -31,8 +31,10 @@ public class PlayerController : Model {
     private Vector3 goCoord, worldOffsetPos;
     private Vector3 eulerLeft, eulerRight;
 
-    private void Awake()
-    {
+
+
+
+    private void Awake() {
 
         SetEulerLimits();
 
@@ -46,21 +48,20 @@ public class PlayerController : Model {
 
     private void OnEnable() {
         GameManager.OnStateChanged += GameManager_OnStateChanged;
+
         inputManager.OnSlidePerformed += OnSlideRotatePerformed;
-        inputManager.OnSlidePerformed += OnSlideMovementPerformed;
         inputManager.OnTouchPerformed += OnTouchPerformed;
         inputManager.OnTouchEnded += OnTouchEnded;
     }
-    private void OnDisable()
-    {
+    private void OnDisable() {
         GameManager.OnStateChanged -= GameManager_OnStateChanged;
         DisableInputs();
     }
 
-    private void DisableInputs()
-    {
+    private void DisableInputs() {
+        GameManager.OnStateChanged -= GameManager_OnStateChanged;
+
         inputManager.OnSlidePerformed -= OnSlideRotatePerformed;
-        inputManager.OnSlidePerformed -= OnSlideMovementPerformed;
         inputManager.OnTouchPerformed -= OnTouchPerformed;
         inputManager.OnTouchEnded -= OnTouchEnded;
     }
@@ -75,6 +76,10 @@ public class PlayerController : Model {
 
             case GameState.Win: SetMovementSpeed(0); canInput = false; break;
             case GameState.Lose: SetMovementSpeed(0); canInput = false; break;
+            case GameState.Scoreboard:
+                SetMovementSpeed(0);
+                canInput = false;
+                BruteForceHandIntoTheMiddle(); break;
             default: break;
         }
     }
@@ -154,6 +159,34 @@ public class PlayerController : Model {
         CheckCardMaterial();
     }
 
+    //scoreboard
+    [SerializeField, Foldout("[Options]")] private float riseAmount, riseTime, bruteForceTime = 1f;
+    private Tween riseTween;
+
+    [Button]
+    private void BruteForceHandIntoTheMiddle() {
+
+        riseTween?.Kill();
+        riseTween = playerRoot.transform.DORotate(Vector3.zero, bruteForceTime).
+            SetEase(Ease.OutSine).
+            OnComplete(() =>
+            {
+                float height = riseAmount;
+                float acquirePercent = Mathf.InverseLerp(
+                    0, Collectibles.Instance.GetCollectibleCount, PlayerPrefs.GetInt(StringData.PREF_COLLECTED));
+                playerRoot.transform.DOMoveY(acquirePercent * height, riseTime).OnComplete(() =>
+                {
+                    GameManager.Instance.ChangeState(GameState.Win);
+                });
+            });
+        riseTween.Play();
+    }
+
+    public void SetCardScoreboardRiseHeight(float riseAmount, float riseTime = 6f) {
+        this.riseTime = riseTime;
+        this.riseAmount = riseAmount;
+    }
+
     #region Rotation
     private void SetEulerLimits() {
         var localEulerAngles = playerRoot.localEulerAngles;
@@ -169,23 +202,13 @@ public class PlayerController : Model {
 
     #region Input
     private void OnTouchPerformed(Vector2 coord) {
-        if (!canInput) return;
         isTouchingScreen = true;
     }
     private void OnTouchEnded() {
-        if (!canInput) return;
         isTouchingScreen = false;
     }
-    private void OnSlideMovementPerformed(Vector2 slideOffset) {
-        if (!isTouchingScreen) return;
-        if (!canInput) return;
-
-        Vector3 goWorldPosition = gameObject.transform.position;
-
-        goCoord = UtilsClass.GetWorldToScreenPoint(goWorldPosition); //Z'si 10 ekranda 
-        worldOffsetPos = UtilsClass.GetScreenToWorldPoint(goCoord + (Vector3)slideOffset);
-    }
     private void OnSlideRotatePerformed(Vector2 slideOffset) {
+        if (!canInput) return;
 
         float rotatePosZ = -slideOffset.x * rotationSpeed * Time.deltaTime;
 
@@ -195,9 +218,6 @@ public class PlayerController : Model {
     private void SlideRotateZ(float delta) {
         if (playerRoot.rotation.z > rotationLimitZ && delta > 0f) return;
         if (playerRoot.rotation.z < -rotationLimitZ && delta < 0f) return;
-
-        //if (playerRoot.rotation.z + delta * 0.010 > 0.65f) return;
-        //if (playerRoot.rotation.z + delta * 0.010 < -0.65f) return;
 
         playerRoot.Rotate(0, 0, delta);
     }

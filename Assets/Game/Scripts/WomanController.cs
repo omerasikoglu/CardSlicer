@@ -29,20 +29,26 @@ public class WomanController : Model {
     private void OnEnable() => GameManager.OnStateChanged += GameManager_OnStateChanged;
     private void OnDisable() => GameManager.OnStateChanged -= GameManager_OnStateChanged;
 
+    #region States
     private void GameManager_OnStateChanged(GameState obj) {
+        SetMovementSpeed(obj == GameState.Run ? defaultSpeed : 0);
+
         switch (obj) {
-            case GameState.TapToPlay: SetMovementSpeed(0); break;
-            case GameState.Run: SetMovementSpeed(2); break;
-            case GameState.Win:
-                SetMovementSpeed(0);
-                break;
-            case GameState.Lose:
-                //PlayLoseFX();
-                SetMovementSpeed(0);
+            case GameState.Scoreboard:
+                PlayScoreboardState();
+
                 break;
             default: break;
         }
     }
+
+    private void PlayScoreboardState() {
+        transform.DORotate(new Vector3(0f, -160f, 0f), 2f).SetEase(Ease.InOutSine).OnComplete(() =>
+        {
+            WomanAnimationController.Instance.PlayIdle();
+        });
+    } 
+    #endregion
 
     private void InitItems() {
 
@@ -66,15 +72,14 @@ public class WomanController : Model {
     public void SetActiveWomanPart(ItemDetails itemDetails) {
 
         //TODO: Make It SOLID
-        
+
         DressVariant dressVariant = itemDetails.dressVariant;
         HairVariant hairVariant = itemDetails.hairVariant;
         ShoesVariant shoesVariant = itemDetails.shoesVariant;
         PurseVariant purseVariant = itemDetails.purseVariant;
         WatchVariant watchVariant = itemDetails.watchVariant;
 
-        if (dressVariant != 0)
-        {
+        if (dressVariant != 0) {
             SetDeactivateListComponents(dressList);
             dressList[(int)dressVariant - 1].gameObject.SetActive(true);
         }
@@ -94,16 +99,15 @@ public class WomanController : Model {
             SetDeactivateListComponents(watchList);
             watchList[(int)watchVariant - 1].gameObject.SetActive(true);
         }
-        else switch (itemDetails.type)
-        {
-            case CollectibleType.Necklace: //only 1 variant
-                necklaceList[0].gameObject.SetActive(true);
-                break;
-            case CollectibleType.Ring: //only 1 variant
-                ringList[0].gameObject.SetActive(true);
-                break;
-            default: break;
-        }
+        else switch (itemDetails.type) {
+                case CollectibleType.Necklace: //only 1 variant
+                    necklaceList[0].gameObject.SetActive(true);
+                    break;
+                case CollectibleType.Ring: //only 1 variant
+                    ringList[0].gameObject.SetActive(true);
+                    break;
+                default: break;
+            }
 
         WomanAnimationController.Instance.PlaySpin();
     }

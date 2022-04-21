@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6206127576816599764}
   m_Layer: 6
   m_Name: visual-Alive
-  m_TagString: Untagged
+  m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,11 +111,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDetails:
     type: 1
-    dress: 5
-    hair: 4
-    shoes: 4
-    purse: 4
-    watch: 4
+    dressVariant: 0
+    hairVariant: 0
+    shoesVariant: 0
+    purseVariant: 0
+    watchVariant: 0
   isFallingDown: 0
   hasExit: 1
   exit: {fileID: 8234558916028437687}
@@ -477,7 +477,7 @@ GameObject:
   - component: {fileID: 1401398736969749056}
   - component: {fileID: 49741742683166020}
   m_Layer: 0
-  m_Name: Exit
+  m_Name: ExitCollider
   m_TagString: Exit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -8,9 +8,10 @@ public class EndArea : MonoBehaviour {
 
     private void OnTriggerEnter(Collider collision) {
 
-        if (collision.CompareTag(StringData.CARD))
-        {
-            GameManager.Instance.ChangeState(GameState.Win);
+        PlayerController player = collision.attachedRigidbody.GetComponent<PlayerController>();
+        if (player != null) {
+            GameManager.Instance.ChangeState(GameState.Scoreboard);
+            player.SetCardScoreboardRiseHeight(scoreboard.GetScoreboardHeight());
         }
     }
 }
