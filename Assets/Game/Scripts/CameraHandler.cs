@@ -18,10 +18,8 @@ public class CameraHandler : MonoBehaviour {
     private CinemachineVirtualCamera currentCam;
     private Cam? oldCam; //bcs while first time OpenCam() returns 0
 
-    private void Awake() {
-        GameManager.OnStateChanged += GameManager_OnStateChanged;
-    }
-
+    private void OnEnable() => GameManager.OnStateChanged += GameManager_OnStateChanged;
+    private void OnDisable() => GameManager.OnStateChanged -= GameManager_OnStateChanged;
     private void GameManager_OnStateChanged(GameState gameState) {
 
         switch (gameState) {

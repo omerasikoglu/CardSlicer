@@ -10,7 +10,7 @@ public class PlayerController : Model {
     [SerializeField, Foldout("[Options]")] private float rotationSpeed = 3f, rotationLimitZ = .65f, eulerAngleLimitZ = 75f;
     [SerializeField, Foldout("[Options]")] private int unhappinessThreshold = 2;
     [SerializeField, Foldout("[Input]")] private InputManager inputManager;
-    [SerializeField, Foldout("[Input]")] private bool isSlideMovementYActive, isSlideMovementXActive, isSlideRotateZActive;
+    [SerializeField, Foldout("[Input]")] private bool isSlideRotateZActive;
 
     [SerializeField] private Transform playerRoot;
     [SerializeField] private WomanController womanController;
@@ -26,14 +26,14 @@ public class PlayerController : Model {
     private Vector3 handFirstPos;
 
     private BoxCollider cardCollider;
-    private bool isTouchingScreen, canMove;
+    [SerializeField, ReadOnly] private bool isTouchingScreen, canInput;
 
     private Vector3 goCoord, worldOffsetPos;
     private Vector3 eulerLeft, eulerRight;
 
-    private void Awake() {
-        GameManager.OnStateChanged += GameManager_OnStateChanged;
-        InputObserver();
+    private void Awake()
+    {
+
         SetEulerLimits();
 
         cardCollider = transform.GetComponentInChildren<BoxCollider>();
@@ -44,12 +44,37 @@ public class PlayerController : Model {
         currentMaterial = materialList[0];
     }
 
+    private void OnEnable() {
+        GameManager.OnStateChanged += GameManager_OnStateChanged;
+        inputManager.OnSlidePerformed += OnSlideRotatePerformed;
+        inputManager.OnSlidePerformed += OnSlideMovementPerformed;
+        inputManager.OnTouchPerformed += OnTouchPerformed;
+        inputManager.OnTouchEnded += OnTouchEnded;
+    }
+    private void OnDisable()
+    {
+        GameManager.OnStateChanged -= GameManager_OnStateChanged;
+        DisableInputs();
+    }
+
+    private void DisableInputs()
+    {
+        inputManager.OnSlidePerformed -= OnSlideRotatePerformed;
+        inputManager.OnSlidePerformed -= OnSlideMovementPerformed;
+        inputManager.OnTouchPerformed -= OnTouchPerformed;
+        inputManager.OnTouchEnded -= OnTouchEnded;
+    }
+
+
     private void GameManager_OnStateChanged(GameState obj) {
         switch (obj) {
-            case GameState.TapToPlay: ReloadPositions(); break;
-            case GameState.Run: SetMovementSpeed(2); break;
-            case GameState.Win: SetMovementSpeed(0); break;
-            case GameState.Lose: SetMovementSpeed(0); break;
+            case GameState.TapToPlay:
+                ReloadPositions();
+                canInput = false; break;
+            case GameState.Run: SetMovementSpeed(2); canInput = true; break;
+
+            case GameState.Win: SetMovementSpeed(0); canInput = false; break;
+            case GameState.Lose: SetMovementSpeed(0); canInput = false; break;
             default: break;
         }
     }
@@ -143,36 +168,24 @@ public class PlayerController : Model {
     #endregion
 
     #region Input
-    private void InputObserver() {
-        inputManager.OnSlidePerformed += OnSlideRotatePerformed;
-        inputManager.OnSlidePerformed += OnSlideMovementPerformed;
-        inputManager.OnTouchPerformed += OnTouchPerformed;
-        inputManager.OnTouchEnded += OnTouchEnded;
-    }
-
     private void OnTouchPerformed(Vector2 coord) {
-        //Ray ray = UtilsClass.GetScreenPointToRay(coord);
-        //Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
-
+        if (!canInput) return;
         isTouchingScreen = true;
     }
     private void OnTouchEnded() {
+        if (!canInput) return;
         isTouchingScreen = false;
     }
     private void OnSlideMovementPerformed(Vector2 slideOffset) {
-        if (!isTouchingScreen || !canMove) return;
-        if (!isSlideMovementYActive && !isSlideMovementXActive) return;
+        if (!isTouchingScreen) return;
+        if (!canInput) return;
 
         Vector3 goWorldPosition = gameObject.transform.position;
 
         goCoord = UtilsClass.GetWorldToScreenPoint(goWorldPosition); //Z'si 10 ekranda 
         worldOffsetPos = UtilsClass.GetScreenToWorldPoint(goCoord + (Vector3)slideOffset);
-
-        if (isSlideMovementYActive) SlideMovementY();
-        if (isSlideMovementXActive) SlideMovementX();
     }
     private void OnSlideRotatePerformed(Vector2 slideOffset) {
-        if (!isTouchingScreen) return;
 
         float rotatePosZ = -slideOffset.x * rotationSpeed * Time.deltaTime;
 
@@ -187,12 +200,6 @@ public class PlayerController : Model {
         //if (playerRoot.rotation.z + delta * 0.010 < -0.65f) return;
 
         playerRoot.Rotate(0, 0, delta);
-    }
-    private void SlideMovementY() {
-        playerRoot.position = new Vector3(transform.position.x, worldOffsetPos.y, transform.position.z);
-    }
-    private void SlideMovementX() {
-        playerRoot.position = new Vector3(worldOffsetPos.x, transform.position.y, transform.position.z);
     }
     #endregion
 }

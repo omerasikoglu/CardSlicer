@@ -10,10 +10,10 @@ public class WomanAnimationController : Singleton<WomanAnimationController>
 
     private void Awake()
     {
-        GameManager.OnStateChanged += GameManager_OnStateChanged;
         womanAnimator = womanAnimator != null ? womanAnimator : GetComponent<Animator>();
     }
-
+    private void OnEnable() => GameManager.OnStateChanged += GameManager_OnStateChanged;
+    private void OnDisable() => GameManager.OnStateChanged -= GameManager_OnStateChanged;
     private void GameManager_OnStateChanged(GameState obj) {
         switch (obj)
         {

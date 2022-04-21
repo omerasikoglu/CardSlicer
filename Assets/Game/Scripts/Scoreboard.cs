@@ -22,30 +22,24 @@ public class Scoreboard : MonoBehaviour {
     private float finalValue; // complete amount, normalized
 
     private void Awake() {
-        
+
         SetFirstNormalizedPointerPosition();
         Debug.Log($"<Color=red>{pointerRenderer.bounds.size}</Color>");
 
     }
 
-    private void OnEnable()
-    {
-        GameManager.OnStateChanged += GameManager_OnStateChanged;
-    }
+    private void OnEnable() => GameManager.OnStateChanged += GameManager_OnStateChanged;
+    private void OnDisable() => GameManager.OnStateChanged -= GameManager_OnStateChanged;
 
-    private void OnDisable() {
-        GameManager.OnStateChanged -= GameManager_OnStateChanged;
-    }
 
-    private void GameManager_OnStateChanged(GameState gameState)
-    {
+    private void GameManager_OnStateChanged(GameState gameState) {
         if (gameState != GameState.Win) return;
         TriggerTheScoreboard();
     }
 
     [Button]
     public void TriggerTheScoreboard() {
-       
+
         finalValue = Mathf.InverseLerp(
             0, Collectibles.Instance.GetCollectibleCount, PlayerPrefs.GetInt(StringData.PREF_COLLECTED));
 
