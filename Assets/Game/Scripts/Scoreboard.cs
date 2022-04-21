@@ -3,20 +3,67 @@ using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
+using DG.Tweening;
 
+[Serializable]
+public enum IncreaseStyle {
+    LeftToRight, BottomToUp,
+}
 public class Scoreboard : MonoBehaviour {
-    [SerializeField] private Transform collectibleRoot;
 
-    private int TotalCollectibleAmount => collectibleRoot.childCount;
+    [SerializeField, BoxGroup("[Transforms]")] private Transform pointerTransform;
 
-    private MeshRenderer scoreboardRenderer => GetComponentInChildren<MeshRenderer>();
+    [SerializeField] private MeshRenderer pointerRenderer;
 
-    
+    [SerializeField] private IncreaseStyle increaseStyle;
 
-    private void Awake()
-    {
-        Debug.Log($"<color=red>{scoreboardRenderer.bounds}</color>");
-        Debug.Log($"<color=green>{scoreboardRenderer.bounds.max}</color>");
-        Debug.Log($"<color=blue>{scoreboardRenderer.bounds.max.y}</color>");
+    [SerializeField] private float pointerReachTime = 5f;
+
+    private float finalValue; // complete amount, normalized
+
+    private void Awake() {
+
+        SetFirstNormalizedPointerPosition();
+        Debug.Log($"<Color=red>{pointerRenderer.bounds.size}</Color>");
+
+    }
+
+    private void OnEnable() => GameManager.OnStateChanged += GameManager_OnStateChanged;
+    private void OnDisable() => GameManager.OnStateChanged -= GameManager_OnStateChanged;
+
+
+    private void GameManager_OnStateChanged(GameState gameState) {
+        if (gameState != GameState.Win) return;
+        TriggerTheScoreboard();
+    }
+
+    [Button]
+    public void TriggerTheScoreboard() {
+
+        finalValue = Mathf.InverseLerp(
+            0, Collectibles.Instance.GetCollectibleCount, PlayerPrefs.GetInt(StringData.PREF_COLLECTED));
+
+        pointerTransform.DOLocalMove(SetFinalNormalizedPointerPosition(), pointerReachTime).SetEase(Ease.OutSine);
+    }
+
+    private void SetFirstNormalizedPointerPosition() {
+
+        pointerTransform.localPosition = .5f * increaseStyle switch
+        {
+            IncreaseStyle.LeftToRight => Vector3.up,
+            IncreaseStyle.BottomToUp => Vector3.right,
+            _ => Vector3.zero
+        };
+
+        pointerRenderer.transform.position -= new Vector3(
+            pointerRenderer.bounds.extents.x, pointerRenderer.bounds.extents.y);
+    }
+    private Vector3 SetFinalNormalizedPointerPosition() {
+        return increaseStyle switch
+        {
+            IncreaseStyle.LeftToRight => new Vector3(finalValue, pointerTransform.localPosition.y),
+            IncreaseStyle.BottomToUp => new Vector3(pointerTransform.localPosition.x, finalValue),
+            _ => Vector3.zero
+        };
     }
 }

@@ -30,8 +30,9 @@ public class UnhappinessBar : Singleton<UnhappinessBar>
     }
     private void CheckGreenBar()
     {
-        barTransform.localScale = new Vector3(Mathf.Lerp(
-            barTransform.localScale.x, UpdateProgressAmountNormalized(), lerpSpeed * Time.deltaTime), 1f, 1f);
+        barTransform.localScale = new Vector3(
+            Mathf.Lerp(barTransform.localScale.x, UpdateProgressAmountNormalized(), lerpSpeed * Time.deltaTime),
+            1f, 1f);
 
         if (currentProgress < maxProgress) return;
 

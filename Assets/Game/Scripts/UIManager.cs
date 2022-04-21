@@ -20,12 +20,11 @@ public class UIManager : Singleton<UIManager> {
     private GameUI activeUI;
 
     protected void Awake() {
-        GameManager.OnStateChanged += GameManager_OnStateChanged;
-
         Init();
         DisableAllUIs();
     }
-
+    private void OnEnable() => GameManager.OnStateChanged += GameManager_OnStateChanged;
+    private void OnDisable() => GameManager.OnStateChanged -= GameManager_OnStateChanged;
     private void GameManager_OnStateChanged(GameState gameState) {
         switch (gameState)
         {
