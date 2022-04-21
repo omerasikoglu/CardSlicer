@@ -36,18 +36,26 @@ public class WomanController : Model {
         switch (obj) {
             case GameState.Scoreboard:
                 PlayScoreboardState();
-
+                break;
+            case GameState.TapToPlay:
+                break;
+            case GameState.Run:
+                rotateTween?.PlayBackwards();
                 break;
             default: break;
         }
     }
 
+    private Tween rotateTween;
     private void PlayScoreboardState() {
-        transform.DORotate(new Vector3(0f, -160f, 0f), 2f).SetEase(Ease.InOutSine).OnComplete(() =>
+        rotateTween?.Kill();
+        rotateTween = transform.DORotate(new Vector3(0f, -160f, 0f), 2f).
+            SetEase(Ease.InOutSine).SetAutoKill(false).
+            OnComplete(() =>
         {
             WomanAnimationController.Instance.PlayIdle();
         });
-    } 
+    }
     #endregion
 
     private void InitItems() {

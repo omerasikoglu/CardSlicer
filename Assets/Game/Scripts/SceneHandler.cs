@@ -61,8 +61,7 @@ public class SceneHandler : MonoBehaviour {
 
         UpdateCounter(ref currentLevel); UpdateCounter(ref nextLevel);
 
-        void UpdateCounter(ref int counter)
-        {
+        void UpdateCounter(ref int counter) {
             counter += counter + 1 > TotalLevelCount ? -TotalLevelCount + 1 : 1;
         }
 
@@ -76,6 +75,22 @@ public class SceneHandler : MonoBehaviour {
     }
     private int GetNextLevelSceneIndex() {
         return nextLevel + nonLevelSceneCount - 1;
+    }
+    private int GetCurrentSceneIndex() {
+        return currentLevel + nonLevelSceneCount - 2;
+    }
+    [Button]
+    public void ReloadThisLevelWhenClicked() { //from ButtonUI
+
+        UnloadThisLevel();
+        LoadCurrentLevel();
+        GameManager.Instance.ChangeState(GameState.TapToPlay);
+    }
+    private void UnloadThisLevel() {
+        SceneManager.UnloadSceneAsync(GetCurrentSceneIndex());
+    }
+    private void LoadCurrentLevel() {
+        SceneManager.LoadSceneAsync(GetCurrentSceneIndex(), LoadSceneMode.Additive);
     }
 
     //#region New Level Scene Loaded When This Level Ended
@@ -91,20 +106,5 @@ public class SceneHandler : MonoBehaviour {
 
     //    GameManager.Instance.ChangeState(GameState.TapToPlay);
     //}
-    //[Button]
-    //public void ReloadThisLevelWhenClicked() { //from ButtonUI
-
-    //    UnloadThisLevel();
-
-    //    LoadCurrentLevel();
-    //}
-
-    //private void UnloadThisLevel() {
-    //    SceneManager.UnloadSceneAsync(currentLevel + nonLevelSceneCount - 1);
-    //}
-    //private void LoadCurrentLevel() {
-    //    PlayerPrefs.SetInt(StringData.PREF_LEVEL, currentLevel);
-    //    SceneManager.LoadSceneAsync(currentLevel + nonLevelSceneCount - 1, LoadSceneMode.Additive);
-    //} 
     //#endregion
 }

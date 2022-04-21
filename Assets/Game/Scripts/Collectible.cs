@@ -112,6 +112,9 @@ public class Collectible : MonoBehaviour {
             player.ItemCollected(this);
             PlayHealUpFX();
             PlayCollectibleTasks(player.GetWomanPosition());
+            
+            if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) != 0) 
+                PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
         }
 
         WomanController woman = collision.GetComponent<WomanController>();

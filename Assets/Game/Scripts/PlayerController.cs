@@ -13,6 +13,7 @@ public class PlayerController : Model {
     [SerializeField, Foldout("[Input]")] private bool isSlideRotateZActive;
 
     [SerializeField] private Transform playerRoot;
+    [SerializeField] private Collider playerCollider;
     [SerializeField] private WomanController womanController;
 
     [SerializeField] private TextMeshProUGUI textMesh;
@@ -23,7 +24,7 @@ public class PlayerController : Model {
     [SerializeField, Foldout("[Card]")] private ParticleSystem upgrade1FX, upgrade2FX;
 
     private Vector3 womanFirstPos;
-    private Vector3 handFirstPos;
+    private Vector3 handRootFirstPos;
 
     private BoxCollider cardCollider;
     [SerializeField, ReadOnly] private bool isTouchingScreen, canInput;
@@ -40,7 +41,8 @@ public class PlayerController : Model {
 
         cardCollider = transform.GetComponentInChildren<BoxCollider>();
 
-        handFirstPos = transform.position;
+        handRootFirstPos = playerRoot.position;
+
         womanFirstPos = womanController.transform.position;
 
         currentMaterial = materialList[0];
@@ -75,7 +77,9 @@ public class PlayerController : Model {
             case GameState.Run: SetMovementSpeed(2); canInput = true; break;
 
             case GameState.Win: SetMovementSpeed(0); canInput = false; break;
-            case GameState.Lose: SetMovementSpeed(0); canInput = false; break;
+            case GameState.Lose: SetMovementSpeed(0);
+                canInput = false;
+                break;
             case GameState.Scoreboard:
                 SetMovementSpeed(0);
                 canInput = false;
@@ -91,7 +95,6 @@ public class PlayerController : Model {
     private void OnTriggerEnter(Collider collision) {
 
         if (collision.CompareTag(StringData.EXIT)) {
-            //Debug.Log("item exit");
             IncreaseUnhappiness();
         }
 
@@ -142,10 +145,12 @@ public class PlayerController : Model {
             PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1);
 
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) < unhappinessThreshold) {
-            //TODO: Woman starts to crying
+            //nothing
 
         }
-        else {
+        else
+        {
+            playerCollider.enabled = false;
             GameManager.Instance.ChangeState(GameState.Lose);
         }
     }
@@ -153,13 +158,15 @@ public class PlayerController : Model {
     public void ReloadPositions() {
 
         SetMovementSpeed(0);
-        transform.position = handFirstPos;
+        playerCollider.enabled = true;
+        transform.position = Vector3.up;
+        playerRoot.position = handRootFirstPos;
         womanController.transform.position = womanFirstPos;
 
         CheckCardMaterial();
     }
 
-    //scoreboard
+    #region Scoreboard
     [SerializeField, Foldout("[Options]")] private float riseAmount, riseTime, bruteForceTime = 1f;
     private Tween riseTween;
 
@@ -185,7 +192,8 @@ public class PlayerController : Model {
     public void SetCardScoreboardRiseHeight(float riseAmount, float riseTime = 6f) {
         this.riseTime = riseTime;
         this.riseAmount = riseAmount;
-    }
+    } 
+    #endregion
 
     #region Rotation
     private void SetEulerLimits() {

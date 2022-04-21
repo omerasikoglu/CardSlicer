@@ -18,16 +18,6 @@ public class GameManager : Singleton<GameManager> {
 
     [SerializeField, ReadOnly] private GameState activeState;
 
-    private void Awake() {
-        InitPlayerPrefs();
-    }
-
-    private void InitPlayerPrefs() {
-        PlayerPrefs.SetInt(StringData.PREF_MONEY, 0);
-        PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
-
-    }
-
     private void Start() {
         ChangeState(GameState.TapToPlay);
     }
@@ -48,6 +38,9 @@ public class GameManager : Singleton<GameManager> {
 
     private void TapToPlay() {
         UIManager.Instance.ShowUI(GameUI.TapToPlay);
+        PlayerPrefs.SetInt(StringData.PREF_COLLECTED, 0);
+        PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
+        PlayerPrefs.SetInt(StringData.PREF_MONEY, 0);
     }
     private void Run() {
         Time.timeScale = 1f;
