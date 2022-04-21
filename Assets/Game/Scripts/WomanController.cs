@@ -67,31 +67,32 @@ public class WomanController : Model {
 
         //TODO: Make It SOLID
         
-        DressVariant dress = itemDetails.dress;
-        HairVariant hair = itemDetails.hair;
-        ShoesVariant shoes = itemDetails.shoes;
-        PurseVariant purse = itemDetails.purse;
-        WatchVariant watch = itemDetails.watch;
+        DressVariant dressVariant = itemDetails.dressVariant;
+        HairVariant hairVariant = itemDetails.hairVariant;
+        ShoesVariant shoesVariant = itemDetails.shoesVariant;
+        PurseVariant purseVariant = itemDetails.purseVariant;
+        WatchVariant watchVariant = itemDetails.watchVariant;
 
-        if (dress != DressVariant.None) {
+        if (dressVariant != 0)
+        {
             SetDeactivateListComponents(dressList);
-            dressList[(int)dress - 1].gameObject.SetActive(true);
+            dressList[(int)dressVariant - 1].gameObject.SetActive(true);
         }
-        else if (hair != HairVariant.None) {
+        else if (hairVariant != 0) {
             SetDeactivateListComponents(hairList);
-            hairList[(int)hair - 1].gameObject.SetActive(true);
+            hairList[(int)hairVariant - 1].gameObject.SetActive(true);
         }
-        else if (shoes != ShoesVariant.None) {
+        else if (shoesVariant != 0) {
             SetDeactivateListComponents(shoesList);
-            shoesList[(int)shoes - 1].gameObject.SetActive(true);
+            shoesList[(int)shoesVariant - 1].gameObject.SetActive(true);
         }
-        else if (purse != PurseVariant.None) {
+        else if (purseVariant != 0) {
             SetDeactivateListComponents(purseList);
-            purseList[(int)purse - 1].gameObject.SetActive(true);
+            purseList[(int)purseVariant - 1].gameObject.SetActive(true);
         }
-        else if (watch != WatchVariant.None) {
+        else if (watchVariant != 0) {
             SetDeactivateListComponents(watchList);
-            watchList[(int)watch - 1].gameObject.SetActive(true);
+            watchList[(int)watchVariant - 1].gameObject.SetActive(true);
         }
         else switch (itemDetails.type)
         {
@@ -101,8 +102,7 @@ public class WomanController : Model {
             case CollectibleType.Ring: //only 1 variant
                 ringList[0].gameObject.SetActive(true);
                 break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            default: break;
         }
 
         WomanAnimationController.Instance.PlaySpin();

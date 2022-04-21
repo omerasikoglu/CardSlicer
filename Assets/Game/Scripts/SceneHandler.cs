@@ -51,7 +51,6 @@ public class SceneHandler : MonoBehaviour {
     public void PreLoadNextLevel() {
 
         SceneManager.LoadSceneAsync(GetNextLevelSceneIndex(), LoadSceneMode.Additive);
-
     }
 
     [Button]
@@ -60,8 +59,12 @@ public class SceneHandler : MonoBehaviour {
         previousLevel = currentLevel;
         SceneManager.UnloadSceneAsync(GetPreviousLevelSceneIndex());
 
-        currentLevel += currentLevel + 1 > TotalLevelCount ? -TotalLevelCount + 1 : 1;
-        nextLevel += nextLevel + 1 > TotalLevelCount ? -TotalLevelCount + 1 : 1;
+        UpdateCounter(ref currentLevel); UpdateCounter(ref nextLevel);
+
+        void UpdateCounter(ref int counter)
+        {
+            counter += counter + 1 > TotalLevelCount ? -TotalLevelCount + 1 : 1;
+        }
 
         PlayerPrefs.SetInt(StringData.PREF_LEVEL, currentLevel);
 

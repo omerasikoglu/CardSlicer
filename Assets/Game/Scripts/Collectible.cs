@@ -16,20 +16,21 @@ public enum CollectibleType {
     //one sample
     Ring = 7, Necklace = 8,
 }
-[Serializable] public enum DressVariant { Dress1 = 1, Dress2 = 2, Dress3 = 3, Dress4 = 4, None = 5 }
-[Serializable] public enum HairVariant { Hair1 = 1, Hair2 = 2, Hair3 = 3, None = 4 }
-[Serializable] public enum ShoesVariant { Shoes1 = 1, Shoes2 = 2, Shoes3 = 3, None = 4 }
-[Serializable] public enum PurseVariant { Purse1 = 1, Purse2 = 2, Purse3 = 3, None = 4 }
-[Serializable] public enum WatchVariant { Watch1 = 1, Watch2 = 2, Watch3 = 3, None = 4 }
+[Serializable] public enum DressVariant { Dress1 = 1, Dress2 = 2, Dress3 = 3, Dress4 = 4, None = 0 }
+[Serializable] public enum HairVariant { Hair1 = 1, Hair2 = 2, Hair3 = 3, None = 0 }
+[Serializable] public enum ShoesVariant { Shoes1 = 1, Shoes2 = 2, Shoes3 = 3, None = 0 }
+[Serializable] public enum PurseVariant { Purse1 = 1, Purse2 = 2, Purse3 = 3, None = 0 }
+[Serializable] public enum WatchVariant { Watch1 = 1, Watch2 = 2, Watch3 = 3, None = 0 }
 [Serializable]
 public struct ItemDetails {
     public CollectibleType type;
     public int money => HowMuchYouEarn();
-    [AllowNesting, ShowIf("IsDress")] public DressVariant dress;
-    [AllowNesting, ShowIf("IsHair")] public HairVariant hair;
-    [AllowNesting, ShowIf("IsShoes")] public ShoesVariant shoes;
-    [AllowNesting, ShowIf("IsPurse")] public PurseVariant purse;
-    [AllowNesting, ShowIf("IsWatch")] public WatchVariant watch;
+
+    [AllowNesting, ShowIf("IsDress")] public DressVariant dressVariant;
+    [AllowNesting, ShowIf("IsHair")] public HairVariant hairVariant;
+    [AllowNesting, ShowIf("IsShoes")] public ShoesVariant shoesVariant;
+    [AllowNesting, ShowIf("IsPurse")] public PurseVariant purseVariant;
+    [AllowNesting, ShowIf("IsWatch")] public WatchVariant watchVariant;
 
     private bool IsDress() { return type == CollectibleType.Dress; }
     private bool IsHair() { return type == CollectibleType.Hair; }

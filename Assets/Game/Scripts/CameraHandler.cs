@@ -10,6 +10,7 @@ public enum Cam {
     PreRun = 0,
     Running = 1,
     FinalPose = 2,
+    FinalPose2 = 3,
 }
 public class CameraHandler : MonoBehaviour {
 
@@ -25,7 +26,12 @@ public class CameraHandler : MonoBehaviour {
         switch (gameState) {
             case GameState.TapToPlay: OpenCam(Cam.PreRun); break;
             case GameState.Run: OpenCam(Cam.Running); break;
-            case GameState.Win: OpenCam(Cam.FinalPose); break;
+            case GameState.Win:
+                OpenCam(Cam.FinalPose);
+                StartCoroutine(UtilsClass.Wait(() =>
+                {
+                    OpenCam(Cam.FinalPose2);
+                }, 3f)); break;
             case GameState.Lose: OpenCam(Cam.FinalPose); break;
             default: break;
         }
