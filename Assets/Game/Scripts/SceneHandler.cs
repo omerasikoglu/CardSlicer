@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour {
-    [SerializeField, ReadOnly] private int currentLevel;
+    [SerializeField, ReadOnly] private int currentLevel, previousLevel, nextLevel;
     [SerializeField] private bool isAutoLoad;
     [SerializeField] private int nonLevelSceneCount = 2;
 
@@ -14,10 +14,19 @@ public class SceneHandler : MonoBehaviour {
     //1 for main, 1 for environment. all others level scene
 
     private void Awake() {
-        currentLevel = 1;
+        previousLevel = 0; currentLevel = 1; nextLevel = currentLevel + 1;
+
         PlayerPrefs.SetInt(StringData.PREF_LEVEL, currentLevel);
         if (!isAutoLoad) return;
         SceneLoadCheck();
+    }
+
+    private void OnEnable() => GameManager.OnStateChanged += GameManager_OnStateChanged;
+    private void OnDisable() => GameManager.OnStateChanged -= GameManager_OnStateChanged;
+
+
+    private void GameManager_OnStateChanged(GameState obj) {
+        if (obj == GameState.Win) PreLoadNextLevel();
     }
 
     private void SceneLoadCheck() {
@@ -39,30 +48,60 @@ public class SceneHandler : MonoBehaviour {
     }
 
     [Button]
-    public void LoadNextLevel() { //from ButtonUI
+    public void PreLoadNextLevel() {
 
-        UnloadThisLevel();
+        SceneManager.LoadSceneAsync(GetNextLevelSceneIndex(), LoadSceneMode.Additive);
 
-        currentLevel -= currentLevel + 1 > TotalLevelCount ? TotalLevelCount : 0;  //when reach the max level
-        currentLevel++;
+    }
 
-        LoadCurrentLevel();
+    [Button]
+    public void UnloadThisLevelWhenClicked() { // destroy old game level. setactive next level
+
+        previousLevel = currentLevel;
+        SceneManager.UnloadSceneAsync(GetPreviousLevelSceneIndex());
+
+        currentLevel += currentLevel + 1 > TotalLevelCount ? -TotalLevelCount + 1 : 1;
+        nextLevel += nextLevel + 1 > TotalLevelCount ? -TotalLevelCount + 1 : 1;
+
+        PlayerPrefs.SetInt(StringData.PREF_LEVEL, currentLevel);
 
         GameManager.Instance.ChangeState(GameState.TapToPlay);
     }
-    [Button]
-    public void ReloadThisLevel() { //from ButtonUI
 
-        UnloadThisLevel();
-
-        LoadCurrentLevel();
+    private int GetPreviousLevelSceneIndex() {
+        return previousLevel + nonLevelSceneCount - 1;
+    }
+    private int GetNextLevelSceneIndex() {
+        return nextLevel + nonLevelSceneCount - 1;
     }
 
-    private void UnloadThisLevel() {
-        SceneManager.UnloadSceneAsync(currentLevel + nonLevelSceneCount - 1);
-    }
-    private void LoadCurrentLevel() {
-        PlayerPrefs.SetInt(StringData.PREF_LEVEL, currentLevel);
-        SceneManager.LoadSceneAsync(currentLevel + nonLevelSceneCount - 1, LoadSceneMode.Additive);
-    }
+    //#region New Level Scene Loaded When This Level Ended
+    //[Button]
+    //public void LoadNextLevelWhenClicked() { //from ButtonUI
+
+    //    UnloadThisLevel();
+
+    //    currentLevel -= currentLevel + 1 > TotalLevelCount ? TotalLevelCount : 0;  //when reach the max level
+    //    currentLevel++;
+
+    //    LoadCurrentLevel();
+
+    //    GameManager.Instance.ChangeState(GameState.TapToPlay);
+    //}
+    //[Button]
+    //public void ReloadThisLevelWhenClicked() { //from ButtonUI
+
+    //    UnloadThisLevel();
+
+    //    LoadCurrentLevel();
+    //}
+
+    //private void UnloadThisLevel() {
+    //    SceneManager.UnloadSceneAsync(currentLevel + nonLevelSceneCount - 1);
+    //}
+    //private void LoadCurrentLevel() {
+    //    PlayerPrefs.SetInt(StringData.PREF_LEVEL, currentLevel);
+    //    SceneManager.LoadSceneAsync(currentLevel + nonLevelSceneCount - 1, LoadSceneMode.Additive);
+    //} 
+    //#endregion
 }
