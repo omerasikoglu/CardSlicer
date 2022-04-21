@@ -45,29 +45,20 @@ public class WomanController : Model {
     }
 
     private void InitItems() {
-        //TODO: make it SOLID
-        foreach (Transform st in watchList) {
-            st.gameObject.SetActive(false);
+        
+        List<List<Transform>> listContainer = new List<List<Transform>>
+        {
+            watchList,purseList,necklaceList,ringList,dressList,hairList,shoesList
+        };
+        foreach (List<Transform> list in listContainer) {
+            
+            int i = 0;
+            while (i < list.Count) {
+                list[i].gameObject.SetActive(false);
+                i++;
+            }
         }
-        foreach (Transform st in purseList) {
-            st.gameObject.SetActive(false);
-        }
-        foreach (Transform st in shoesList) {
-            st.gameObject.SetActive(false);
-        }
-        foreach (Transform st in necklaceList) {
-            st.gameObject.SetActive(false);
-        }
-        foreach (Transform st in ringList) {
-            st.gameObject.SetActive(false);
-        }
-        //at least 1 active
-        foreach (Transform st in dressList) {
-            st.gameObject.SetActive(false);
-        }
-        foreach (Transform st in hairList) {
-            st.gameObject.SetActive(false);
-        }
+        
         dressList[0].gameObject.SetActive(true);
         hairList[0].gameObject.SetActive(true);
         shoesList[0].gameObject.SetActive(true);
