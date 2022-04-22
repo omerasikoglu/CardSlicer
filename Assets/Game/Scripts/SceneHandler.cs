@@ -6,9 +6,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour {
-    [SerializeField, ReadOnly] private int currentLevel, previousLevel, nextLevel;
-    [SerializeField] private bool isAutoLoad;
-    [SerializeField] private int nonLevelSceneCount = 2;
+    [SerializeField, BoxGroup(StringData.OPTIONS)] private bool isAutoLoad;
+    [SerializeField, BoxGroup("[Readonly]"), ReadOnly] private int currentLevel, previousLevel, nextLevel;
+    private const int nonLevelSceneCount = 2;
 
     private int TotalLevelCount => SceneManager.sceneCountInBuildSettings - nonLevelSceneCount;
     //1 for main, 1 for environment. all others level scene
@@ -46,6 +46,7 @@ public class SceneHandler : MonoBehaviour {
         if (!isLoad) SceneManager.LoadSceneAsync(nonLevelSceneCount, LoadSceneMode.Additive);
     }
 
+    #region State
     private void OnEnable() => GameManager.OnStateChanged += GameManager_OnStateChanged;
     private void OnDisable() => GameManager.OnStateChanged -= GameManager_OnStateChanged;
     private void GameManager_OnStateChanged(GameState gameState) {
@@ -61,16 +62,18 @@ public class SceneHandler : MonoBehaviour {
 
         SceneManager.LoadSceneAsync(GetNextLevelSceneIndex(), LoadSceneMode.Additive);
     }
+    #endregion
 
+    #region from ButtonUI
     [Button]
-    public void UnloadOldLevelWhenClicked() { // unload old level scene. set active new one.
+    public void UnloadPreviousLevelWhenClicked() { // unload old level scene. set active new one.
 
         previousLevel = currentLevel;
         SceneManager.UnloadSceneAsync(GetPreviousLevelSceneIndex());
 
         UpdateCounter(ref currentLevel); UpdateCounter(ref nextLevel);
 
-        void UpdateCounter(ref int counter) {
+        void UpdateCounter(ref int counter) { // total level is reached?
             counter += counter + 1 > TotalLevelCount ? -TotalLevelCount + 1 : 1;
         }
 
@@ -86,6 +89,7 @@ public class SceneHandler : MonoBehaviour {
     private void UnloadThisLevel() {
         SceneManager.UnloadSceneAsync(GetCurrentLevelSceneIndex());
     }
+    #endregion
 
     #region GetLevelIndexes
     private int GetPreviousLevelSceneIndex() {
