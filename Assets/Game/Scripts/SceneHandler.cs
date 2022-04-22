@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class SceneHandler : MonoBehaviour {
     [SerializeField, BoxGroup(StringData.OPTIONS)] private bool isAutoLoad;
     [SerializeField, BoxGroup("[Readonly]"), ReadOnly] private int currentLevel, previousLevel, nextLevel;
-    private const int nonLevelSceneCount = 2;
+    private readonly int nonLevelSceneCount = 2;
 
     private int TotalLevelCount => SceneManager.sceneCountInBuildSettings - nonLevelSceneCount;
     //1 for main, 1 for environment. all others level scene
@@ -20,7 +20,6 @@ public class SceneHandler : MonoBehaviour {
 
         CheckEssentialScenesIsLoaded();
     }
-
     private void Init() {
         previousLevel = 0;
         currentLevel = 1;
@@ -58,7 +57,7 @@ public class SceneHandler : MonoBehaviour {
     private void PreLoadThisLevel() {
         SceneManager.LoadSceneAsync(GetCurrentLevelSceneIndex(), LoadSceneMode.Additive);
     }
-    public void PreLoadNextLevel() {
+    private void PreLoadNextLevel() {
 
         SceneManager.LoadSceneAsync(GetNextLevelSceneIndex(), LoadSceneMode.Additive);
     }
@@ -66,7 +65,7 @@ public class SceneHandler : MonoBehaviour {
 
     #region from ButtonUI
     [Button]
-    public void UnloadPreviousLevelWhenClicked() { // unload old level scene. set active new one.
+    public void LoadNextLevelWhenClicked() { // unload old level scene. set active new one.
 
         previousLevel = currentLevel;
         SceneManager.UnloadSceneAsync(GetPreviousLevelSceneIndex());

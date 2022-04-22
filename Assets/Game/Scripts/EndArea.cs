@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EndArea : MonoBehaviour {
+
     [SerializeField] private Scoreboard scoreboard;
 
     private void OnTriggerEnter(Collider collision) {
@@ -11,7 +12,7 @@ public class EndArea : MonoBehaviour {
         PlayerController player = collision.attachedRigidbody.GetComponent<PlayerController>();
         if (player != null) {
             GameManager.Instance.ChangeState(GameState.Scoreboard);
-            player.SetCardScoreboardRiseHeight(scoreboard.GetScoreboardHeight());
+            player.SetCardScoreboardRiseHeight(scoreboard.GetScoreboardHeight(), scoreboard.GetPointerReachTimeToTop());
         }
     }
 }
