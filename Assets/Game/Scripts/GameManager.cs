@@ -9,23 +9,14 @@ public enum GameState {
     TapToPlay = 1,
     Run = 2,
     Win = 3,
-    Lose = 4
+    Lose = 4,
+    Scoreboard =5,
 }
 [DefaultExecutionOrder(-2)]
 public class GameManager : Singleton<GameManager> {
     public static event Action<GameState> OnStateChanged;
 
     [SerializeField, ReadOnly] private GameState activeState;
-
-    private void Awake() {
-        InitPlayerPrefs();
-    }
-
-    private void InitPlayerPrefs() {
-        PlayerPrefs.SetInt(StringData.PREF_MONEY, 0);
-        PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
-
-    }
 
     private void Start() {
         ChangeState(GameState.TapToPlay);
@@ -39,7 +30,6 @@ public class GameManager : Singleton<GameManager> {
             case GameState.TapToPlay: TapToPlay(); break;
             case GameState.Run: Run(); break;
             case GameState.Win: WinGame(); break;
-            case GameState.Lose: LoseGame(); break;
             default: break;
         }
 
@@ -48,6 +38,9 @@ public class GameManager : Singleton<GameManager> {
 
     private void TapToPlay() {
         UIManager.Instance.ShowUI(GameUI.TapToPlay);
+        PlayerPrefs.SetInt(StringData.PREF_COLLECTED, 0);
+        PlayerPrefs.SetInt(StringData.PREF_UNHAPPINESS, 0);
+        PlayerPrefs.SetInt(StringData.PREF_MONEY, 0);
     }
     private void Run() {
         Time.timeScale = 1f;
@@ -56,15 +49,9 @@ public class GameManager : Singleton<GameManager> {
         UIManager.Instance.ShowUI(GameUI.Win);
         //character stop woman fail anim activate
     }
-    private void LoseGame() {
-
-    }
-
-    public void SetRunningState() {
+    
+    public void SetRunningState() { // from TapToPlayUI/ButtonUI
         ChangeState(GameState.Run);
     }
 
-    public void SetWinningState() {
-        ChangeState(GameState.Win);
-    }
 }

@@ -13,7 +13,7 @@ public class Scoreboard : MonoBehaviour {
 
     [SerializeField, BoxGroup("[Transforms]")] private Transform pointerTransform;
 
-    [SerializeField] private MeshRenderer pointerRenderer;
+    [SerializeField] private MeshRenderer pointerRenderer,scoreboardRenderer;
 
     [SerializeField] private IncreaseStyle increaseStyle;
 
@@ -65,5 +65,10 @@ public class Scoreboard : MonoBehaviour {
             IncreaseStyle.BottomToUp => new Vector3(pointerTransform.localPosition.x, finalValue),
             _ => Vector3.zero
         };
+    }
+
+    public float GetScoreboardHeight()
+    {
+        return scoreboardRenderer.bounds.size.y;
     }
 }

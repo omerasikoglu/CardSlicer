@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6206127576816599764}
   m_Layer: 6
   m_Name: visual-Alive
-  m_TagString: Untagged
+  m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,11 +111,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDetails:
     type: 1
-    dress: 5
-    hair: 4
-    shoes: 4
-    purse: 4
-    watch: 4
+    dressVariant: 0
+    hairVariant: 0
+    shoesVariant: 0
+    purseVariant: 0
+    watchVariant: 0
   isFallingDown: 0
   hasExit: 1
   exit: {fileID: 8234558916028437687}
@@ -477,7 +477,7 @@ GameObject:
   - component: {fileID: 1401398736969749056}
   - component: {fileID: 49741742683166020}
   m_Layer: 0
-  m_Name: Exit
+  m_Name: ExitCollider
   m_TagString: Exit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -510,7 +510,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 6, y: 8, z: 0}
-  m_Center: {x: 0, y: -0.24, z: 2}
+  m_Center: {x: 0, y: -0.24, z: 1.5}
 --- !u!1001 &320038801404924356
 PrefabInstance:
   m_ObjectHideFlags: 0

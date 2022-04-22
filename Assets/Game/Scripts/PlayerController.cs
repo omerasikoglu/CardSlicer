@@ -13,6 +13,7 @@ public class PlayerController : Model {
     [SerializeField, Foldout("[Input]")] private bool isSlideRotateZActive;
 
     [SerializeField] private Transform playerRoot;
+    [SerializeField] private Collider playerCollider;
     [SerializeField] private WomanController womanController;
 
     [SerializeField] private TextMeshProUGUI textMesh;
@@ -23,7 +24,7 @@ public class PlayerController : Model {
     [SerializeField, Foldout("[Card]")] private ParticleSystem upgrade1FX, upgrade2FX;
 
     private Vector3 womanFirstPos;
-    private Vector3 handFirstPos;
+    private Vector3 handRootFirstPos;
 
     private BoxCollider cardCollider;
     [SerializeField, ReadOnly] private bool isTouchingScreen, canInput;
@@ -31,14 +32,17 @@ public class PlayerController : Model {
     private Vector3 goCoord, worldOffsetPos;
     private Vector3 eulerLeft, eulerRight;
 
-    private void Awake()
-    {
+
+
+
+    private void Awake() {
 
         SetEulerLimits();
 
         cardCollider = transform.GetComponentInChildren<BoxCollider>();
 
-        handFirstPos = transform.position;
+        handRootFirstPos = playerRoot.position;
+
         womanFirstPos = womanController.transform.position;
 
         currentMaterial = materialList[0];
@@ -46,21 +50,20 @@ public class PlayerController : Model {
 
     private void OnEnable() {
         GameManager.OnStateChanged += GameManager_OnStateChanged;
+
         inputManager.OnSlidePerformed += OnSlideRotatePerformed;
-        inputManager.OnSlidePerformed += OnSlideMovementPerformed;
         inputManager.OnTouchPerformed += OnTouchPerformed;
         inputManager.OnTouchEnded += OnTouchEnded;
     }
-    private void OnDisable()
-    {
+    private void OnDisable() {
         GameManager.OnStateChanged -= GameManager_OnStateChanged;
         DisableInputs();
     }
 
-    private void DisableInputs()
-    {
+    private void DisableInputs() {
+        GameManager.OnStateChanged -= GameManager_OnStateChanged;
+
         inputManager.OnSlidePerformed -= OnSlideRotatePerformed;
-        inputManager.OnSlidePerformed -= OnSlideMovementPerformed;
         inputManager.OnTouchPerformed -= OnTouchPerformed;
         inputManager.OnTouchEnded -= OnTouchEnded;
     }
@@ -74,7 +77,13 @@ public class PlayerController : Model {
             case GameState.Run: SetMovementSpeed(2); canInput = true; break;
 
             case GameState.Win: SetMovementSpeed(0); canInput = false; break;
-            case GameState.Lose: SetMovementSpeed(0); canInput = false; break;
+            case GameState.Lose: SetMovementSpeed(0);
+                canInput = false;
+                break;
+            case GameState.Scoreboard:
+                SetMovementSpeed(0);
+                canInput = false;
+                BruteForceHandIntoTheMiddle(); break;
             default: break;
         }
     }
@@ -86,7 +95,6 @@ public class PlayerController : Model {
     private void OnTriggerEnter(Collider collision) {
 
         if (collision.CompareTag(StringData.EXIT)) {
-            //Debug.Log("item exit");
             IncreaseUnhappiness();
         }
 
@@ -137,10 +145,12 @@ public class PlayerController : Model {
             PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1);
 
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS) < unhappinessThreshold) {
-            //TODO: Woman starts to crying
+            //nothing
 
         }
-        else {
+        else
+        {
+            playerCollider.enabled = false;
             GameManager.Instance.ChangeState(GameState.Lose);
         }
     }
@@ -148,11 +158,42 @@ public class PlayerController : Model {
     public void ReloadPositions() {
 
         SetMovementSpeed(0);
-        transform.position = handFirstPos;
+        playerCollider.enabled = true;
+        transform.position = Vector3.up;
+        playerRoot.position = handRootFirstPos;
         womanController.transform.position = womanFirstPos;
 
         CheckCardMaterial();
     }
+
+    #region Scoreboard
+    [SerializeField, Foldout("[Options]")] private float riseAmount, riseTime, bruteForceTime = 1f;
+    private Tween riseTween;
+
+    [Button]
+    private void BruteForceHandIntoTheMiddle() {
+
+        riseTween?.Kill();
+        riseTween = playerRoot.transform.DORotate(Vector3.zero, bruteForceTime).
+            SetEase(Ease.OutSine).
+            OnComplete(() =>
+            {
+                float height = riseAmount;
+                float acquirePercent = Mathf.InverseLerp(
+                    0, Collectibles.Instance.GetCollectibleCount, PlayerPrefs.GetInt(StringData.PREF_COLLECTED));
+                playerRoot.transform.DOMoveY(acquirePercent * height, riseTime).OnComplete(() =>
+                {
+                    GameManager.Instance.ChangeState(GameState.Win);
+                });
+            });
+        riseTween.Play();
+    }
+
+    public void SetCardScoreboardRiseHeight(float riseAmount, float riseTime = 6f) {
+        this.riseTime = riseTime;
+        this.riseAmount = riseAmount;
+    } 
+    #endregion
 
     #region Rotation
     private void SetEulerLimits() {
@@ -169,23 +210,13 @@ public class PlayerController : Model {
 
     #region Input
     private void OnTouchPerformed(Vector2 coord) {
-        if (!canInput) return;
         isTouchingScreen = true;
     }
     private void OnTouchEnded() {
-        if (!canInput) return;
         isTouchingScreen = false;
     }
-    private void OnSlideMovementPerformed(Vector2 slideOffset) {
-        if (!isTouchingScreen) return;
-        if (!canInput) return;
-
-        Vector3 goWorldPosition = gameObject.transform.position;
-
-        goCoord = UtilsClass.GetWorldToScreenPoint(goWorldPosition); //Z'si 10 ekranda 
-        worldOffsetPos = UtilsClass.GetScreenToWorldPoint(goCoord + (Vector3)slideOffset);
-    }
     private void OnSlideRotatePerformed(Vector2 slideOffset) {
+        if (!canInput) return;
 
         float rotatePosZ = -slideOffset.x * rotationSpeed * Time.deltaTime;
 
@@ -195,9 +226,6 @@ public class PlayerController : Model {
     private void SlideRotateZ(float delta) {
         if (playerRoot.rotation.z > rotationLimitZ && delta > 0f) return;
         if (playerRoot.rotation.z < -rotationLimitZ && delta < 0f) return;
-
-        //if (playerRoot.rotation.z + delta * 0.010 > 0.65f) return;
-        //if (playerRoot.rotation.z + delta * 0.010 < -0.65f) return;
 
         playerRoot.Rotate(0, 0, delta);
     }
