@@ -21,6 +21,8 @@ public enum CollectibleType {
 [Serializable] public enum ShoesVariant { Shoes1 = 1, Shoes2 = 2, Shoes3 = 3, None = 0 }
 [Serializable] public enum PurseVariant { Purse1 = 1, Purse2 = 2, Purse3 = 3, None = 0 }
 [Serializable] public enum WatchVariant { Watch1 = 1, Watch2 = 2, Watch3 = 3, None = 0 }
+[Serializable] public enum NecklaceVariant { Necklace1 = 1, None = 0 }
+[Serializable] public enum RingVariant { Ring1 = 1, None = 0 }
 [Serializable]
 public struct ItemDetails {
     public CollectibleType type;
@@ -31,12 +33,16 @@ public struct ItemDetails {
     [AllowNesting, ShowIf("IsShoes")] public ShoesVariant shoesVariant;
     [AllowNesting, ShowIf("IsPurse")] public PurseVariant purseVariant;
     [AllowNesting, ShowIf("IsWatch")] public WatchVariant watchVariant;
+    [AllowNesting, ShowIf("IsNecklace")] public NecklaceVariant necklaceVariant;
+    [AllowNesting, ShowIf("IsRing")] public RingVariant ringVariant;
 
     private bool IsDress() { return type == CollectibleType.Dress; }
     private bool IsHair() { return type == CollectibleType.Hair; }
     private bool IsShoes() { return type == CollectibleType.Shoes; }
     private bool IsPurse() { return type == CollectibleType.Purse; }
     private bool IsWatch() { return type == CollectibleType.Watch; }
+    private bool IsNecklace() { return type == CollectibleType.Necklace; }
+    private bool IsRing() { return type == CollectibleType.Ring; }
 
     private int HowMuchYouEarn() { //could be negative
         return type switch

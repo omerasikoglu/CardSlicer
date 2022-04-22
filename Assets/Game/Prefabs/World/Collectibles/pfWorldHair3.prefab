@@ -402,11 +402,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDetails:
     type: 3
-    dress: 0
-    hair: 3
-    shoes: 2
-    purse: 3
-    watch: 3
+    dressVariant: 0
+    hairVariant: 3
+    shoesVariant: 0
+    purseVariant: 0
+    watchVariant: 0
   isFallingDown: 0
   hasExit: 1
   exit: {fileID: 81640470972537918}

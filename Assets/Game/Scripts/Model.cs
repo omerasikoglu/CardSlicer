@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public abstract class Model : MonoBehaviour
 {
-    [SerializeField, Foldout("[Movement]")] private float movementSpeed = 2f;
+    [SerializeField, Foldout(StringData.OPTIONS)] private float movementSpeed = 2f;
     protected const int defaultSpeed = 2;
 
     protected virtual void Update()

@@ -110,11 +110,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDetails:
     type: 5
-    dress: 5
-    hair: 4
-    shoes: 4
-    purse: 1
-    watch: 4
+    dressVariant: 0
+    hairVariant: 0
+    shoesVariant: 0
+    purseVariant: 1
+    watchVariant: 0
+    necklaceVariant: 0
+    ringVariant: 0
   isFallingDown: 0
   hasExit: 1
   exit: {fileID: 8871244032358171539}
