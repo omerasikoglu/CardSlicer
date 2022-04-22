@@ -86,6 +86,13 @@ public class WomanController : Model {
         ShoesVariant shoesVariant = itemDetails.shoesVariant;
         PurseVariant purseVariant = itemDetails.purseVariant;
         WatchVariant watchVariant = itemDetails.watchVariant;
+        
+        List<Enum> allInOneList = new List<Enum>
+        {
+            dressVariant,hairVariant,shoesVariant,purseVariant,watchVariant
+        };
+
+
 
         if (dressVariant != 0) {
             SetDeactivateListComponents(dressList);
@@ -125,15 +132,5 @@ public class WomanController : Model {
             st.gameObject.SetActive(false);
         }
 
-    }
-
-
-    private static void CheckCatWalk() {
-        if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) >= 2) {
-            WomanAnimationController.Instance.PlayCry();
-        }
-        else {
-            WomanAnimationController.Instance.PlayCatWalk();
-        }
     }
 }
