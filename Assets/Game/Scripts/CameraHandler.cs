@@ -31,7 +31,7 @@ public class CameraHandler : MonoBehaviour {
                 StartCoroutine(UtilsClass.Wait(() =>
                 {
                     OpenCam(Cam.FinalPose2);
-                }, 3f)); break;
+                }, 0f)); break;
             case GameState.Lose: OpenCam(Cam.FinalPose); break;
             default: break;
         }

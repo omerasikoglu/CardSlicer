@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using NaughtyAttributes;
 using DG.Tweening;
 using TMPro;
@@ -10,36 +9,31 @@ public class PlayerController : Model {
     [SerializeField, Foldout("[Options]")] private float rotationSpeed = 3f, rotationLimitZ = .65f, eulerAngleLimitZ = 75f;
     [SerializeField, Foldout("[Options]")] private int unhappinessThreshold = 2;
     [SerializeField, Foldout("[Input]")] private InputManager inputManager;
-    [SerializeField, Foldout("[Input]")] private bool isSlideRotateZActive;
 
     [SerializeField] private Transform playerRoot;
     [SerializeField] private Collider playerCollider;
     [SerializeField] private WomanController womanController;
 
-    [SerializeField] private TextMeshProUGUI textMesh;
+    [SerializeField] private TextMeshProUGUI textMesh; //TODO: Cut this off to another script
 
     [SerializeField, Foldout("[Card]")] private List<Material> materialList;
     private Material currentMaterial;
     [SerializeField, Foldout("[Card]")] private MeshRenderer cardMeshRenderer;
     [SerializeField, Foldout("[Card]")] private ParticleSystem upgrade1FX, upgrade2FX;
 
-    private Vector3 womanFirstPos;
+    private Vector3 womanFirstPos; //TODO: CUT THIS OFF TO WOMAN CONTROLLER
     private Vector3 handRootFirstPos;
 
-    private BoxCollider cardCollider;
     [SerializeField, ReadOnly] private bool isTouchingScreen, canInput;
 
-    private Vector3 goCoord, worldOffsetPos;
-    private Vector3 eulerLeft, eulerRight;
+    [SerializeField, Foldout("[Options]")] private Vector3 eulerLeft, eulerRight;
 
-
-
+    private Sequence mySequence;
 
     private void Awake() {
+        Sequence mySequence = DOTween.Sequence();
 
         SetEulerLimits();
-
-        cardCollider = transform.GetComponentInChildren<BoxCollider>();
 
         handRootFirstPos = playerRoot.position;
 
@@ -77,7 +71,8 @@ public class PlayerController : Model {
             case GameState.Run: SetMovementSpeed(2); canInput = true; break;
 
             case GameState.Win: SetMovementSpeed(0); canInput = false; break;
-            case GameState.Lose: SetMovementSpeed(0);
+            case GameState.Lose:
+                SetMovementSpeed(0);
                 canInput = false;
                 break;
             case GameState.Scoreboard:
@@ -108,7 +103,6 @@ public class PlayerController : Model {
         textMesh.SetText($"{PlayerPrefs.GetInt(StringData.PREF_MONEY)}$");
         CheckCardMaterial();
     }
-
     public void CheckCardMaterial() {
         int currentMoney = PlayerPrefs.GetInt(StringData.PREF_MONEY);
 
@@ -120,8 +114,6 @@ public class PlayerController : Model {
             2 => materialList[2],
             _ => materialList[2],
         };
-
-        //if (cardMeshRenderer.material == currentMaterial) return;
 
         switch (moneyAmount) {
             case 1: PlayFX(upgrade1FX); break;
@@ -137,6 +129,8 @@ public class PlayerController : Model {
 
         particle.Play();
     }
+
+    //TODO: ADD THIS TO UNHAPPINESS MANAGER 
     private void IncreaseUnhappiness() {
 
         if (PlayerPrefs.GetInt(StringData.PREF_UNHAPPINESS, 0) + 1 > unhappinessThreshold) return;
@@ -148,51 +142,66 @@ public class PlayerController : Model {
             //nothing
 
         }
-        else
-        {
+        else {
             playerCollider.enabled = false;
             GameManager.Instance.ChangeState(GameState.Lose);
         }
     }
 
     public void ReloadPositions() {
+        ReverseWrist();
+        playerRoot.rotation = new Quaternion(0f, 0f, 0f, 0f);
 
         SetMovementSpeed(0);
         playerCollider.enabled = true;
         transform.position = Vector3.up;
         playerRoot.position = handRootFirstPos;
-        womanController.transform.position = womanFirstPos;
+        womanController.transform.position = womanFirstPos; //TODO: CUT THIS OFF
 
         CheckCardMaterial();
     }
 
     #region Scoreboard
-    [SerializeField, Foldout("[Options]")] private float riseAmount, riseTime, bruteForceTime = 1f;
-    private Tween riseTween;
 
+    [SerializeField, Foldout("[Options]")] private float riseAmount, riseTime, bruteForceTime = 1f;
+    [SerializeField] private Transform wristPivot;
+
+    private Tween riseTween, wristTween, wristTween2;
     [Button]
     private void BruteForceHandIntoTheMiddle() {
 
-        riseTween?.Kill();
-        riseTween = playerRoot.transform.DORotate(Vector3.zero, bruteForceTime).
+        wristTween?.Kill(); wristTween2?.Kill(); riseTween?.Kill();
+        mySequence.
+            Append(wristTween = wristPivot.DOLocalRotate(new Vector3(0f, 0f, 90f), bruteForceTime).SetAutoKill(false)).
+            Append(wristTween2 = wristPivot.DOLocalMoveX(0.65f, bruteForceTime).SetAutoKill(false)).
+            Append(riseTween = playerRoot.transform.DORotate(Vector3.zero, bruteForceTime).SetAutoKill(false).
             SetEase(Ease.OutSine).
             OnComplete(() =>
             {
-                float height = riseAmount;
                 float acquirePercent = Mathf.InverseLerp(
                     0, Collectibles.Instance.GetCollectibleCount, PlayerPrefs.GetInt(StringData.PREF_COLLECTED));
-                playerRoot.transform.DOMoveY(acquirePercent * height, riseTime).OnComplete(() =>
+                playerRoot.transform.DOMoveY(acquirePercent * riseAmount, riseTime).OnComplete(() =>
                 {
                     GameManager.Instance.ChangeState(GameState.Win);
                 });
-            });
-        riseTween.Play();
+            })).
+            SetAutoKill(false);
+        mySequence.Play();
+    }
+
+    [Button]
+    private void ReverseWrist() {
+
+        wristTween.PlayBackwards();
+        wristTween2.PlayBackwards();
+        riseTween.Rewind();
+        //mySequence.PlayBackwards();
     }
 
     public void SetCardScoreboardRiseHeight(float riseAmount, float riseTime = 6f) {
         this.riseTime = riseTime;
         this.riseAmount = riseAmount;
-    } 
+    }
     #endregion
 
     #region Rotation
@@ -205,6 +214,7 @@ public class PlayerController : Model {
     private void CheckRotationLimits() {
         if (playerRoot.rotation.z > rotationLimitZ) playerRoot.localEulerAngles = eulerLeft;
         if (playerRoot.rotation.z < -rotationLimitZ) playerRoot.localEulerAngles = eulerRight;
+        Debug.Log(playerRoot.rotation.z);
     }
     #endregion
 
@@ -220,7 +230,7 @@ public class PlayerController : Model {
 
         float rotatePosZ = -slideOffset.x * rotationSpeed * Time.deltaTime;
 
-        if (isSlideRotateZActive) SlideRotateZ(rotatePosZ);
+        SlideRotateZ(rotatePosZ);
     }
 
     private void SlideRotateZ(float delta) {

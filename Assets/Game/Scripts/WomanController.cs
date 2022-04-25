@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
@@ -16,7 +14,6 @@ public class WomanController : Model {
 
     private List<List<Transform>> womanPieceTransformsList;
 
-
     private void Awake() => Init();
 
     private void Init() {
@@ -25,7 +22,6 @@ public class WomanController : Model {
             dressList, hairList, shoesList, purseList, watchList,necklaceList,ringList
         };
 
-        //set active false all first
         foreach (Transform piece in womanPieceTransformsList.SelectMany(o => o)) {
             piece.gameObject.SetActive(false);
         }
@@ -64,8 +60,8 @@ public class WomanController : Model {
     }
     #endregion
 
-
-    public void SetActiveWomanPart(ItemDetails itemDetails) { //trigger from Collectible
+    #region Dependencies
+    public void SetActiveWomanPart(ItemDetails itemDetails) { //Call from Collectible OnTrigger
 
         List<int> womanPieceList = new List<int> {
             (int) itemDetails.dressVariant, (int)itemDetails.hairVariant, (int)itemDetails.shoesVariant,
@@ -75,17 +71,20 @@ public class WomanController : Model {
 
         for (int i = 0; i < womanPieceList.Count; i++) { //Pick exact item's true variant
             if (womanPieceList[i] == 0) continue;
-            SetDeactivateListComponents(womanPieceTransformsList[i]);
+
+            SetDeactiveListComponents(womanPieceTransformsList[i]);
+
             womanPieceTransformsList[i][womanPieceList[i] - 1].gameObject.SetActive(true);
         }
 
         WomanAnimationController.Instance.PlaySpin();
     }
 
-    private void SetDeactivateListComponents(List<Transform> list) {
+    private void SetDeactiveListComponents(List<Transform> list) {
         foreach (Transform st in list) {
             st.gameObject.SetActive(false);
         }
+    } 
 
-    }
+    #endregion
 }

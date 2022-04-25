@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83ea1b04b2e324a40adae03c454e5ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAutoLoad: 0
+  isAutoLoad: 1
   currentLevel: 0
   previousLevel: 0
   nextLevel: 0
@@ -363,7 +363,7 @@ Transform:
   m_Children:
   - {fileID: 1054093551}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &134344873
 GameObject:
@@ -756,7 +756,7 @@ Transform:
   - {fileID: 1482597403}
   - {fileID: 17266369}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &494692647
 GameObject:
@@ -1640,7 +1640,7 @@ Transform:
   - {fileID: 2123147320}
   - {fileID: 1656313364}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832870057
 GameObject:
@@ -2680,67 +2680,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 488062, guid: 661f21b6e6d0a6543a4a1a9122f017b0, type: 3}
   m_PrefabInstance: {fileID: 1257050184}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1270475850
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2059932400652920492, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: itemDetails.ringVariant
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.09
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 6.38
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668836, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369122848688668843, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
-      propertyPath: m_Name
-      value: pfWorldRing
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c71a84e28d6390844a7bd543f95fa6c5, type: 3}
 --- !u!1 &1307478718
 GameObject:
   m_ObjectHideFlags: 0
@@ -3491,7 +3430,6 @@ MonoBehaviour:
   eulerAngleLimitZ: 75
   unhappinessThreshold: 2
   inputManager: {fileID: 426093766}
-  isSlideRotateZActive: 1
   playerRoot: {fileID: 1316445117}
   playerCollider: {fileID: 717867971}
   womanController: {fileID: 203701172199460820}
@@ -3505,9 +3443,12 @@ MonoBehaviour:
   upgrade2FX: {fileID: 145199049}
   isTouchingScreen: 0
   canInput: 0
+  eulerLeft: {x: 0, y: 0, z: 0}
+  eulerRight: {x: 0, y: 0, z: 0}
   riseAmount: 0
   riseTime: 0
   bruteForceTime: 1
+  wristPivot: {fileID: 1421414333}
 --- !u!54 &1656313366
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3718,7 +3659,7 @@ Transform:
   - {fileID: 1514497305}
   - {fileID: 1499094160}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2021942683
 GameObject:
