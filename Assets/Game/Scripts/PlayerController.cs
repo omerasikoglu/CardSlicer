@@ -68,7 +68,7 @@ public class PlayerController : Model {
             case GameState.TapToPlay:
                 ReloadPositions();
                 canInput = false; break;
-            case GameState.Run: SetMovementSpeed(2); canInput = true; break;
+            case GameState.Run: SetMovementSpeed(0); canInput = true; break;
 
             case GameState.Win: SetMovementSpeed(0); canInput = false; break;
             case GameState.Lose:
@@ -214,7 +214,7 @@ public class PlayerController : Model {
     private void CheckRotationLimits() {
         if (playerRoot.rotation.z > rotationLimitZ) playerRoot.localEulerAngles = eulerLeft;
         if (playerRoot.rotation.z < -rotationLimitZ) playerRoot.localEulerAngles = eulerRight;
-        Debug.Log(playerRoot.rotation.z);
+        //Debug.Log(playerRoot.rotation.z);
     }
     #endregion
 
