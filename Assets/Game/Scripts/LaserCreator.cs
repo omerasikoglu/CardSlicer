@@ -20,7 +20,7 @@ public class LaserCreator : MonoBehaviour {
 
         RaycastHit hit3;
         Bounds bounds = cardCollider.bounds;
-        float rayLength = 5f;
+        float rayLength = 2f;
 
         bool isHitCollectible = Physics.BoxCast(
             center: new Vector3(bounds.center.x, bounds.center.y, bounds.max.z),

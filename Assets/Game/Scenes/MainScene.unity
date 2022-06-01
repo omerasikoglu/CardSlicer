@@ -3797,7 +3797,7 @@ GameObject:
   - component: {fileID: 1842085102}
   - component: {fileID: 1842085101}
   m_Layer: 0
-  m_Name: Instan
+  m_Name: Rectangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
